@@ -1,0 +1,1368 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>منصة جَذوة المتكاملة — النسخة التنفيذية المطورة</title>
+<style>
+:root{
+  --bg:#f4f7f5; --card:#ffffff; --ink:#17342f; --muted:#6e807a; --primary:#1f6f5d; --primary2:#2f8c76;
+  --soft:#e9f3ef; --line:#dbe6e1; --gold:#c89a42; --goldsoft:#fff7e7; --blue:#4a7aa4; --bluesoft:#edf4fb;
+  --teal:#297d85; --tealsoft:#eaf8f9; --rose:#b25959; --rosesoft:#fdeeed; --amber:#ae7b1a; --ambersoft:#fff2d7;
+  --violet:#6b69cf; --violetsoft:#f0effd; --shadow:0 12px 28px rgba(18,57,49,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}
+.app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,#173d36,#265f53);color:#fff;padding:18px 15px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:15px}
+.logo{width:54px;height:54px;border-radius:16px;background:#fff;color:var(--primary);display:grid;place-items:center;font-size:26px;font-weight:900}
+.brand h1{margin:0;font-size:21px}.brand small{color:#d0e3dd}
+.nav-top,.phase-body{display:grid;gap:7px}
+.nav-btn,.phase-head,.sub-btn{width:100%;border:0;cursor:pointer;text-align:right;border-radius:12px}
+.nav-btn{padding:11px 12px;background:rgba(255,255,255,.09);color:#fff;font-weight:700}.nav-btn:hover,.nav-btn.active{background:#fff;color:var(--primary)}
+.phase-group{margin:9px 0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden}
+.phase-head{background:transparent;color:#fff;padding:13px;display:flex;align-items:center;justify-content:space-between}
+.phase-meta{display:flex;gap:10px;align-items:center}.phase-no{width:31px;height:31px;border-radius:10px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-weight:800}.phase-title b{display:block}.phase-title small{color:#d0e3dd}
+.phase-body{display:none;padding:0 10px 10px}.phase-group.open .phase-body{display:grid}
+.sub-btn{padding:9px 11px;background:rgba(255,255,255,.06);color:#eef7f4;font-size:13px}.sub-btn:hover,.sub-btn.active{background:#fff;color:var(--primary);font-weight:700}
+.gate-sub{border-right:3px solid var(--gold);background:rgba(200,154,66,.16)}
+.sidebar-note{margin-top:14px;padding:12px;background:rgba(255,255,255,.09);border-radius:12px;font-size:12px;line-height:1.8}
+.main{padding:22px 28px 55px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.page-title h2{margin:0 0 6px;font-size:28px}.page-title p{margin:0;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:700}
+.primary{background:var(--primary);color:#fff}.soft{background:var(--soft);color:var(--primary)}.outline{background:#fff;border:1px solid var(--line);color:var(--ink)}.danger{background:#fde8e8;color:#9c4040}.gold-btn{background:var(--goldsoft);color:#8a6117}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow);margin-bottom:15px}
+.card h3{margin:0 0 12px;font-size:18px}.card-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;inset:auto 0 0 0;height:5px;background:var(--primary)}
+.kpi.c1:before{background:var(--primary)} .kpi.c2:before{background:var(--gold)} .kpi.c3:before{background:var(--blue)} .kpi.c4:before{background:var(--teal)} .kpi.c5:before{background:var(--rose)} .kpi.c6:before{background:var(--violet)}
+.kpi small{color:var(--muted)} .kpi .n{font-size:28px;font-weight:900;margin:6px 0 0}
+.grid2{display:grid;grid-template-columns:1.35fr .65fr;gap:15px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stack{display:grid;gap:12px}
+.badge{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;align-items:center;gap:6px}.green{background:#dff3e8;color:#1d6952}.amber{background:#fff0d5;color:#8f6217}.red{background:#fde2e2;color:#9b3f3f}.blue{background:#e6eef8;color:#3b6f9c}.gray{background:#edf1ef;color:#66756f}.gold{background:var(--goldsoft);color:#7c5919}.violet{background:var(--violetsoft);color:#5a58b8}
+.notice{padding:12px 14px;border:1px solid #dce8e4;background:#f5f9f7;border-radius:12px;font-size:13px;line-height:1.8}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;background:#fff;min-width:760px}th,td{padding:10px;border-bottom:1px solid #edf0ee;text-align:right;font-size:13px;vertical-align:top}th{background:#eef4f1;color:#35534c}
+.progress{height:8px;background:#edf1ef;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;background:var(--primary2)}
+.flow{display:grid;grid-template-columns:repeat(12,minmax(110px,1fr));gap:7px;overflow:auto;padding-bottom:2px}.flow-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 8px;min-height:74px;text-align:center;font-size:12px;display:flex;flex-direction:column;justify-content:center}.flow-item.current{background:var(--soft);border-color:#93bcb1}.flow-item.gate{background:var(--goldsoft);border-color:#ead4a4}.diamond{width:18px;height:18px;transform:rotate(45deg);background:var(--gold);margin:0 auto 7px;border-radius:3px}
+.phase-map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.phase-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px}.phase-card h4{margin:0 0 6px}.phase-card p{margin:0;color:var(--muted);font-size:12px}.phase-card .gate-label{margin-top:10px;padding:7px 8px;background:var(--goldsoft);border-radius:8px;color:#77561d;font-size:11px;font-weight:700}
+.bar-list{display:grid;gap:11px}.bar-row{display:grid;grid-template-columns:160px 1fr 45px;gap:10px;align-items:center;font-size:12px}.bar{height:10px;background:#edf1ef;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--primary2)}
+.timeline{display:grid;gap:9px}.event{display:flex;gap:10px}.event-dot{width:11px;height:11px;border-radius:50%;background:var(--primary2);margin-top:5px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tool{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}.tool:hover{border-color:#90b9ae;box-shadow:0 8px 18px rgba(24,77,65,.08)}.tool b{display:block;margin-bottom:5px}.tool small{display:block;color:var(--muted);line-height:1.7}.tool p{margin:8px 0;color:#45615a;font-size:12px;line-height:1.7}
+.gate-workspace{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start}.gate-side{position:sticky;top:16px}.gate-panel{background:#fffdf7;border:1px solid #ead4a4;border-radius:18px;padding:14px}.gate-panel h4{margin:0 0 10px;color:#84611d}.gate-panel .field{margin-bottom:10px}.gate-panel .btn{width:100%}
+.gate-main .section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.section h4{margin:0 0 10px}
+.checklist{display:grid;gap:8px}.check-item{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fbfcfb}
+.criteria-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.criterion{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfcfb}.criterion h5{margin:0 0 8px;font-size:13px}.criterion select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.link-buttons{display:grid;gap:8px}.link-buttons .btn{width:100%}
+.metrics-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric-donut{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;margin:4px auto 10px;background:conic-gradient(var(--primary2) calc(var(--pct)*1%), #edf1ef 0)}
+.ring span{width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:900;font-size:18px}
+.dimension-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px}.dimension-card h4{margin:0 0 10px;font-size:14px}.dimension-item{margin-bottom:10px}.dimension-item:last-child{margin-bottom:0}
+.record-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.record-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:8px}.record-card h4{margin:0}.record-card p{margin:0;color:#47645c;font-size:13px;line-height:1.7}.record-meta{display:flex;gap:6px;flex-wrap:wrap}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700;color:#49645d}.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}.field textarea{min-height:90px;resize:vertical}
+.actions-sm{display:flex;gap:6px;flex-wrap:wrap}.empty{padding:30px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(8,26,22,.5);display:none;align-items:center;justify-content:center;padding:18px;z-index:90}.modal.show{display:flex}.modal-box{width:min(980px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.22)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{width:36px;height:36px;border-radius:10px;border:0;background:#edf1ef;cursor:pointer}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{border:0;background:#f1f5f3;color:#48625b;border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:700}.tab.active{background:var(--primary);color:#fff}
+.award{padding:14px;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;gap:8px;text-align:center}.award .icon{font-size:30px;filter:grayscale(1);opacity:.35}.award.active .icon{filter:none;opacity:1}.award.active{border-color:#d4b36b;background:#fffaf0}
+.note-sm{font-size:12px;color:var(--muted)}.tag{display:inline-block;padding:3px 8px;border-radius:999px;background:#eef4f1;color:#36524c;font-size:10px}.chipline{display:flex;gap:6px;flex-wrap:wrap}
+.accordion{display:grid;gap:8px}.acc-item{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}.acc-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fbfcfb}.acc-body{display:none;padding:0 14px 14px}.acc-item.open .acc-body{display:block}
+.highlight{background:linear-gradient(135deg,#1f6f5d,#2d8570);color:#fff}.highlight .note-sm,.highlight p{color:#eaf6f2}.quick-list{display:grid;gap:10px}.quick-item{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.target-list{display:grid;gap:8px}.target-row{display:grid;grid-template-columns:1.2fr .7fr .7fr auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fbfcfb}.target-row.current{border-color:#9dbfb5;background:#f0f8f5}.approval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.approval-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:8px}.approval-card h4{margin:0}.inline-tool-values{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.inline-tool-value{padding:9px;border:1px solid var(--line);border-radius:10px;background:#fff}.inline-tool-value b{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+@media(max-width:1250px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2,.gate-workspace{grid-template-columns:1fr}.metrics-panel,.criteria-grid,.grid5{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:980px){.app{grid-template-columns:88px 1fr}.brand h1,.brand small,.phase-title,.sidebar-note{display:none}.phase-head{justify-content:center}.phase-body{display:none!important}.grid3,.grid4,.record-grid,.tool-grid,.phase-map,.metrics-panel,.criteria-grid,.approval-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.app{display:block}.sidebar{position:static;height:auto}.main{padding:15px}.kpis,.grid3,.grid4,.record-grid,.tool-grid,.phase-map,.metrics-panel,.criteria-grid,.form-grid,.grid5,.approval-grid,.inline-tool-values{grid-template-columns:1fr}.target-row{grid-template-columns:1fr}.topbar{align-items:flex-start}.gate-row{grid-template-columns:1fr}}
+
+.cycle-card,.path-card,.logic-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.cycle-steps{display:grid;grid-template-columns:repeat(9,minmax(120px,1fr));gap:8px;overflow:auto}.cycle-step{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fbfcfb;text-align:center;font-size:12px}.cycle-step.done{background:var(--soft);border-color:#9ac2b7}.cycle-step.current{background:var(--goldsoft);border-color:#e0bd75}
+.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.path-card h4{margin:0 0 8px}.path-card ul{margin:0;padding-right:18px;line-height:1.9;color:#4c665f}
+.logic-table{width:100%;border-collapse:collapse}.logic-table th,.logic-table td{border:1px solid var(--line);padding:8px;vertical-align:top}.logic-table th{background:#eef4f1}.logic-level{font-weight:800;white-space:nowrap}.logic-actions{display:flex;gap:6px;flex-wrap:wrap}
+.criterion-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-top:7px}.criterion.locked{border-color:#e1b3b3;background:#fff7f7}
+.approval-final{border:2px solid #e2cc93;background:#fffaf0;border-radius:18px;padding:16px}.approval-final h4{color:#7b5718;margin:0 0 10px}.approval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.multi-select{min-height:120px}
+@media(max-width:900px){.path-grid,.approval-grid{grid-template-columns:1fr}}
+
+</style>
+
+<style id="mobile-responsive-patch">
+/* تحسينات توافق الجوال — مضافة دون تغيير وظائف المنصة */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{overflow-x:hidden}
+.mobile-menu-toggle,.mobile-sidebar-close,.mobile-sidebar-backdrop{display:none}
+
+@media (max-width: 768px){
+  :root{--mobile-pad:12px}
+  body{font-size:15px}
+  body.mobile-nav-open{overflow:hidden}
+
+  .app{display:block;min-height:100vh}
+  .main{width:100%;padding:70px var(--mobile-pad) 34px;min-width:0}
+
+  .mobile-menu-toggle{
+    display:flex;position:fixed;top:10px;right:10px;z-index:1002;
+    width:48px;height:48px;border:0;border-radius:14px;background:var(--primary);color:#fff;
+    align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(18,57,49,.24);cursor:pointer
+  }
+  .mobile-sidebar-close{
+    display:grid;position:absolute;top:12px;left:12px;width:42px;height:42px;place-items:center;
+    border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.1);color:#fff;
+    font-size:24px;cursor:pointer
+  }
+  .mobile-sidebar-backdrop{
+    position:fixed;inset:0;z-index:999;background:rgba(9,28,24,.48);backdrop-filter:blur(2px)
+  }
+  body.mobile-nav-open .mobile-sidebar-backdrop{display:block}
+
+  .sidebar{
+    position:fixed!important;z-index:1000;top:0;right:0;left:auto;width:min(88vw,340px);height:100dvh;
+    transform:translateX(110%);transition:transform .25s ease;box-shadow:-16px 0 36px rgba(0,0,0,.2);
+    padding:70px 14px 24px;overflow-y:auto;overscroll-behavior:contain
+  }
+  body.mobile-nav-open .sidebar{transform:translateX(0)}
+  .brand{position:absolute;top:12px;right:14px;left:62px;margin:0}
+  .brand h1,.brand small,.phase-title,.sidebar-note{display:block!important}
+  .phase-head{justify-content:space-between!important}
+  .phase-body{display:none!important}
+  .phase-group.open .phase-body{display:grid!important}
+  .nav-btn,.sub-btn,.phase-head{min-height:46px;font-size:15px}
+
+  .topbar{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+  .page-title{padding-inline-start:0}
+  .page-title h2{font-size:clamp(23px,7vw,31px);line-height:1.25;margin:0 0 5px}
+  .page-title p{font-size:14px;line-height:1.6}
+  .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px}
+  .actions .btn{width:100%;padding:10px 8px;font-size:14px;min-height:44px}
+  .actions .btn.primary:last-child{grid-column:1/-1}
+
+  .card{padding:14px;border-radius:16px;margin-bottom:12px;box-shadow:0 7px 20px rgba(18,57,49,.07)}
+  .card-head{align-items:flex-start;gap:9px}
+  .card-head h3,.card h3{font-size:18px;line-height:1.45}
+  .notice{font-size:13px;padding:11px;line-height:1.75}
+
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}
+  .kpi{padding:12px;border-radius:14px;min-height:92px}
+  .kpi .n{font-size:25px}.kpi small{font-size:12px}
+
+  .grid2,.grid3,.grid4,.grid5,.record-grid,.tool-grid,.phase-map,.metrics-panel,.criteria-grid,
+  .form-grid,.approval-grid,.inline-tool-values,.path-grid{grid-template-columns:1fr!important;gap:10px}
+  .field.full{grid-column:auto}
+
+  .flow,.cycle-steps{
+    display:flex!important;overflow-x:auto;gap:9px;padding:2px 2px 12px;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain
+  }
+  .flow-item,.cycle-step{flex:0 0 74vw;max-width:280px;scroll-snap-align:start;min-height:88px}
+
+  .phase-card,.record-card,.tool,.approval-card,.cycle-card,.path-card,.logic-card{padding:13px;border-radius:14px}
+  .record-card p,.tool p{font-size:13px;line-height:1.75}
+
+  .metrics-panel{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .metric-donut{padding:10px}.ring{width:78px;height:78px}.ring span{width:55px;height:55px;font-size:16px}
+
+  .bar-row{grid-template-columns:100px 1fr 34px;gap:7px}
+
+  .table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+  table{min-width:680px}
+  th,td{padding:9px 8px;font-size:12px;white-space:normal}
+
+  .filters{display:grid;grid-template-columns:1fr;width:100%;gap:8px}
+  .filters input,.filters select,.filters .btn{width:100%;min-height:44px}
+  .actions-sm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:7px}
+  .actions-sm .btn{width:100%;min-height:42px;padding:8px 9px}
+  .actions-sm input,.actions-sm select{grid-column:1/-1;width:100%;min-height:44px}
+
+  .gate-workspace{display:block!important}
+  .gate-side{position:static!important;margin-bottom:12px}
+  .gate-panel{padding:13px}
+  .target-row{grid-template-columns:1fr!important}
+  .check-item{align-items:flex-start;padding:9px}
+
+  .field input,.field select,.field textarea{font-size:16px;width:100%;min-height:46px}
+  .field textarea{min-height:110px}
+  .multi-select{min-height:140px}
+  .btn{min-height:44px;touch-action:manipulation}
+
+  .modal{padding:0;align-items:flex-end}
+  .modal-box{
+    width:100%;max-width:none;height:min(94dvh,900px);max-height:94dvh;border-radius:20px 20px 0 0;
+    padding:15px 13px calc(18px + env(safe-area-inset-bottom));overscroll-behavior:contain
+  }
+  .modal-head{position:sticky;top:-15px;z-index:5;background:#fff;padding:12px 0 10px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+  .modal-head h3{font-size:20px;line-height:1.4;margin:0;padding-left:8px}
+  .close{flex:0 0 42px;width:42px;height:42px}
+
+  .tabs{display:grid;grid-template-columns:1fr 1fr}.tab{padding:9px 6px;font-size:13px}
+  .chipline{display:grid;grid-template-columns:1fr}
+  .award{padding:12px}
+  .approval-final{padding:13px}
+  .logic-table{min-width:760px}
+
+  /* إخفاء شريط التمرير مع بقاء التمرير متاحًا */
+  .flow::-webkit-scrollbar,.cycle-steps::-webkit-scrollbar{height:5px}
+  .flow::-webkit-scrollbar-thumb,.cycle-steps::-webkit-scrollbar-thumb{background:#b9c9c4;border-radius:999px}
+}
+
+@media (max-width: 420px){
+  .main{padding-inline:9px}
+  .kpis{grid-template-columns:1fr 1fr!important}
+  .actions{grid-template-columns:1fr 1fr}
+  .metrics-panel{grid-template-columns:1fr 1fr!important}
+  .flow-item,.cycle-step{flex-basis:82vw}
+  .actions-sm{grid-template-columns:1fr}
+  .page-title h2{font-size:24px}
+}
+
+@media (hover:none) and (pointer:coarse){
+  .btn,.nav-btn,.sub-btn,.phase-head,.tool,.acc-head{-webkit-tap-highlight-color:transparent}
+  .tool:hover{box-shadow:none}
+}
+</style>
+
+</head>
+<body>
+<button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="فتح القائمة" aria-controls="appSidebar" aria-expanded="false">☰</button>
+<div class="mobile-sidebar-backdrop" id="mobileSidebarBackdrop" aria-hidden="true"></div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">ج</div><div><h1>منصة جَذوة</h1><small>مختبر الابتكار والأثر</small></div></div>
+    <div class="nav-top">
+      <button class="nav-btn active" onclick="openPage('dashboard',this)">لوحة القيادة</button>
+      <button class="nav-btn" onclick="openPage('observatory',this)">مرصد الفرص والاحتياجات</button>
+      <button class="nav-btn" onclick="openPage('portfolio',this)">محفظة الابتكار</button>
+      <button class="nav-btn" onclick="openPage('cycles',this)">دورات معمل جَذوة</button>
+    </div>
+    <div id="phaseNav"></div>
+    <div class="nav-top" style="margin-top:10px">
+      <button class="nav-btn" onclick="openPage('knowledge',this)">بنك المعرفة</button>
+      <button class="nav-btn" onclick="openPage('rewards',this)">التحفيز والتكريم</button>
+      <button class="nav-btn" onclick="openPage('settings',this)">الإعدادات والصلاحيات</button>
+    </div>
+    <div class="sidebar-note">
+      <b>تحديثات هذه النسخة:</b><br>
+      لوحة قيادة أكثر جاذبية، نسب الأبعاد، مرصد فرص واحتياجات، بطاقات تحديات وأفكار أكثر شمولًا، تعريفات أدوات التحليل، صفحة متابعة وقياس الأثر، وصفحة بوابة قرار أكثر تفصيلًا وسهولة في المقارنة.
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title">
+        <h2 id="title">لوحة القيادة</h2>
+        <p id="desc">رؤية مؤسسية مترابطة تدعم القرار وتكشف الأولويات والاختناقات والأثر.</p>
+      </div>
+      <div class="actions">
+        <button class="btn outline" onclick="document.getElementById('importFile').click()">استيراد</button>
+        <input id="importFile" type="file" accept=".json" hidden onchange="importData(event)">
+        <button class="btn soft" onclick="exportData()">تصدير البيانات</button>
+        <button class="btn soft" onclick="window.print()">طباعة التقرير</button>
+        <button class="btn primary" onclick="smartAdd()">+ إضافة جديد</button>
+      </div>
+    </div>
+
+    <section class="page active" id="dashboard">
+      <div class="kpis">
+        <div class="kpi c1"><small>التحديات النشطة</small><div class="n" id="kc"></div></div>
+        <div class="kpi c2"><small>الأفكار المسجلة</small><div class="n" id="ki"></div></div>
+        <div class="kpi c3"><small>المشروعات</small><div class="n" id="kp"></div></div>
+        <div class="kpi c4"><small>التجارب</small><div class="n" id="ke"></div></div>
+        <div class="kpi c5"><small>قرارات البوابات</small><div class="n" id="kg"></div></div>
+        <div class="kpi c6"><small>مواد بنك المعرفة</small><div class="n" id="kk"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>خريطة الرحلة والبوابات</h3><span class="badge green">مترابطة</span></div>
+        <div class="flow">
+          <div class="flow-item current"><b>تحديات جذوة</b>رصد وتحليل أولي</div>
+          <div class="flow-item current"><b>بوابة الأفكار</b>اقتراح وتفاعل</div>
+          <div class="flow-item current"><b>مصفاة التقييم</b>أثر/سهولة/مواءمة</div>
+          <div class="flow-item current"><b>الاستكشاف المتعمق</b>أدوات المنهجية</div>
+          <div class="flow-item gate"><div class="diamond"></div><b>بوابة 1</b>الاستكشاف والقبول</div>
+          <div class="flow-item"><b>صياغة المشكلة</b>تحليل دقيق</div>
+          <div class="flow-item"><b>نطاق التدخل</b>الحدود والقيود</div>
+          <div class="flow-item gate"><div class="diamond"></div><b>بوابة 2</b>اعتماد المشكلة والنطاق</div>
+          <div class="flow-item"><b>اختيار الحل</b>المفاضلة</div>
+          <div class="flow-item"><b>النموذج الأولي</b>خطة التجربة</div>
+          <div class="flow-item gate"><div class="diamond"></div><b>بوابة 3</b>جاهزية التجربة</div>
+          <div class="flow-item"><b>التنفيذ والأثر</b>القرار النهائي والتوثيق</div>
+        </div>
+      </div>
+
+      <div class="phase-map card">
+        <div class="phase-card"><h4>1. الاستكشاف</h4><p>نفهم التحدي ونثبت الاحتياج بالأدلة.</p><div class="gate-label">تنتهي ببوابة الاستكشاف والقبول</div></div>
+        <div class="phase-card"><h4>2. التحديد</h4><p>نحدد المشكلة والنطاق ونضبط التدخل.</p><div class="gate-label">تنتهي ببوابة اعتماد المشكلة والنطاق</div></div>
+        <div class="phase-card"><h4>3. التطوير</h4><p>نبتكر الحل ونهيئه للتجربة.</p><div class="gate-label">تنتهي ببوابة اعتماد الحل وجاهزية التجربة</div></div>
+        <div class="phase-card"><h4>4. التسليم</h4><p>ننّفذ، نتابع، نقيس، نعمم، ونوثق.</p><div class="gate-label">تنتهي ببوابة القرار النهائي</div></div>
+      </div>
+
+      <div class="metrics-panel" id="dashboardDonuts"></div>
+
+      <div class="grid2">
+        <div class="stack">
+          <div class="card">
+            <div class="card-head"><h3>نِسَب الأبعاد في التحديات</h3><span class="badge blue">قراءة سريعة</span></div>
+            <div id="dimensionBoard" class="dimension-card"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>توزيع المحفظة حسب المراحل</h3><span class="badge violet">فوري</span></div>
+            <div id="stageBars" class="bar-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>أداء البوابات</h3><span class="badge gold">حوكمة</span></div>
+            <div class="table-wrap"><table><thead><tr><th>البوابة</th><th>عدد السجلات</th><th>متوسط الدرجة</th><th>الجاهز</th><th>بحاجة تطوير</th></tr></thead><tbody id="gatePerf"></tbody></table></div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card highlight">
+            <h3>ملخص القرار التنفيذي</h3>
+            <div id="executiveSummary" class="quick-list"></div>
+          </div>
+          <div class="card"><h3>إشارات قرار سريعة</h3><div id="signals" class="timeline"></div></div>
+          <div class="card"><h3>آخر الأنشطة</h3><div id="recent" class="timeline"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="observatory">
+      <div class="card">
+        <div class="card-head">
+          <h3>مرصد الفرص والاحتياجات</h3>
+          <button class="btn primary" onclick="openForm('opportunity')">+ إضافة فرصة / احتياج</button>
+        </div>
+        <div class="notice">نعم، أنصح بإضافة المرصد؛ لأنه يمثل نقطة التغذية المستمرة لمختبر جَذوة، ويُثري التحديات بالأدلة ويمنع أن يكون تسجيل التحديات معزولًا عن الواقع.</div>
+        <br>
+        <div id="opportunityList" class="record-grid"></div>
+      </div>
+    </section>
+
+
+    <section class="page" id="cycles">
+      <div class="card">
+        <div class="card-head"><h3>دورات معمل جَذوة</h3><button class="btn primary" onclick="openForm('cycle')">+ دورة جديدة</button></div>
+        <div class="notice">الدورة حاوية تشغيلية تجمع التحديات والمشروعات والفرق والعيادات والبوابات خلال فترة محددة، وفق رحلة المعمل التساعية في المنهجية.</div><br>
+        <div id="cycleList" class="record-grid"></div>
+      </div>
+      <div class="card">
+        <h3>المسار الفردي والمسار الجماعي</h3>
+        <div class="path-grid">
+          <div class="path-card"><h4>المسار الفردي</h4><ul><li>لتحديات التحسين اليومية داخل إدارة أو قسم واحد.</li><li>يمر بالمراحل الأربع بنماذج مبسطة.</li><li>عيادات متابعة دورية.</li><li>توثيق الأدلة والقرارات في مستودع المعرفة.</li><li>اعتماد ضمن الصلاحيات أو رفع عند الحاجة.</li></ul></div>
+          <div class="path-card"><h4>المسار الجماعي</h4><ul><li>للتحديات الاستراتيجية أو المشتركة بين الإدارات.</li><li>فريق متعدد التخصصات.</li><li>ورش الاستكشاف والتحديد والتطوير والتسليم.</li><li>مشاركة المستفيدين وأصحاب المصلحة.</li><li>عرض مخرجات كل مرحلة على بوابة القرار.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="portfolio">
+      <div class="card">
+        <div class="card-head">
+          <h3>محفظة الابتكار</h3>
+          <div class="filters">
+            <input id="portfolioSearch" placeholder="بحث..." oninput="renderPortfolio()">
+            <select id="portfolioStage" onchange="renderPortfolio()"><option value="">كل المراحل</option><option>الاستكشاف</option><option>التحديد</option><option>التطوير</option><option>التسليم</option></select>
+          </div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>الرقم</th><th>المشروع</th><th>المالك</th><th>المسار</th><th>المرحلة</th><th>التقدم</th><th>الإجراء</th></tr></thead><tbody id="portfolioBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <div id="phasePages"></div>
+
+    <section class="page" id="knowledge">
+      <div class="card">
+        <div class="card-head">
+          <h3>بنك المعرفة</h3>
+          <div class="actions-sm"><input id="knowledgeSearch" placeholder="ابحث في البنك..." oninput="renderKnowledge()"><button class="btn primary" onclick="openForm('knowledge')">+ إضافة مادة</button></div>
+        </div>
+        <div class="notice">يعرض البنك كل تفاصيل المواد: النوع، الحالة، الوصف، الدرس المستفاد، الكلمات المفتاحية، والرابط بالمشروع أو التحدي، مع إمكانية التعديل.</div>
+        <br>
+        <div id="knowledgeList" class="grid3"></div>
+      </div>
+    </section>
+
+    <section class="page" id="rewards">
+      <div class="card">
+        <div class="card-head"><h3>التحفيز والتكريم</h3><span class="badge green">وفق الخطة السنوية</span></div>
+        <div class="notice">النقاط والأوسمة أداة ترشيح وتحفيز، وليست استحقاقًا ماليًا تلقائيًا. يعتمد نوع الحافز وقيمته وتوقيته وفق خطة الابتكار السنوية والميزانية والصلاحيات المعتمدة.</div><br>
+        <div class="table-wrap"><table><thead><tr><th>المشارك</th><th>النقاط</th><th>المصدر</th><th>الأوسمة المكتسبة</th></tr></thead><tbody id="rewardsBody"></tbody></table></div>
+      </div>
+      <div class="card"><h3>الأوسمة</h3><div class="grid4" id="badgeGrid"></div><p class="note-sm">الأوسمة تظهر باهتة قبل بلوغ حدّها، ثم تتلوّن تلقائيًا عند اكتمال النقاط المستهدفة.</p></div><div class="card"><h3>أنواع الحوافز الممكنة حسب المنهجية</h3><div class="grid4"><div class="record-card"><h4>تقدير معنوي</h4><p>شهادة، إشادة مؤسسية، أو تكريم.</p></div><div class="record-card"><h4>تطوير مهني</h4><p>رصيد تدريبي أو ترشيح لبرنامج نوعي.</p></div><div class="record-card"><h4>فرص وتمكين</h4><p>قيادة تجربة أو تمثيل الجهة أو المشاركة في فريق ابتكار.</p></div><div class="record-card"><h4>حافز معتمد</h4><p>جائزة أو كوبون أو مرونة وفق الخطة السنوية والصلاحية.</p></div></div></div>
+    </section>
+
+    <section class="page" id="settings">
+      <div class="card">
+        <h3>سياسة التقييم والصلاحيات</h3>
+        <div class="notice">
+          <b>سياسة التقييم المعتمدة:</b><br>
+          تستخدم بوابة الأفكار <b>مصفاة الفرز الأولي</b> لترتيب الأولويات، بينما تستخدم صفحة التقييم والبوابات <b>تقييمًا منهجيًا واحدًا فقط</b> وفق المعايير الأربعة.<br><br>
+          <b>إدارة الابتكار:</b> إدارة المنهجية والتيسير. <b>الإدارة المالكة:</b> توفير البيانات والتنفيذ. <b>إدارة الاستراتيجية وتطوير الأعمال:</b> اعتماد الحل والميزانية والمخاطر. <b>الإدارة التنفيذية العليا:</b> القرار النهائي والتعميم.<br><br>
+          <b>مصفاة التقييم:</b> أثر 40 + سهولة 30 + مواءمة 30 = 100. <b>البوابات:</b> 4 معايير × درجات من 1 إلى 3 = 12. القاعدة الضابطة: 10–12 جاهز، 7–9 تطوير، 4–6 إعادة تطوير، ولا يجتاز عند درجة 1 في الاحتياج أو القيمة.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="close" onclick="closeModal()">×</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const awardsCatalog = [
+  {name:'راصد التحديات', icon:'🔎', threshold:50, desc:'رصد تحديات وفرص ذات قيمة.'},
+  {name:'مبتكر فضي', icon:'💡', threshold:100, desc:'قدّم أفكارًا اجتازت الفرز.'},
+  {name:'قائد تجربة', icon:'🧪', threshold:150, desc:'قاد تجربة ضمن مختبر جذوة.'},
+  {name:'صانع أثر', icon:'🏆', threshold:200, desc:'ارتبط اسمه بمبادرة حققت أثرًا.'}
+];
+
+const toolInfo = {
+  'التمهيد التحليلي': {def:'أداة تهيئة سريعة لفهم التحدي قبل التعمق.', how:'تُستخدم لبناء فهم أوّلي للمشكلة والمستفيدين والمعطيات.', result:'تنتج تصورًا أوليًا وأسئلة بحث موجِّهة.'},
+  'برادشو': {def:'أداة لتصنيف الاحتياج بأنواعه المختلفة.', how:'تُعبّأ عبر مقارنة الاحتياج المستشعر والمعبّر والمعياري والمقارن.', result:'تنتج فهمًا أعمق لنوع الاحتياج وأولويته.'},
+  'خريطة أصحاب المصلحة': {def:'أداة لتحديد الأطراف المؤثرة والمتأثرة.', how:'تُستخدم لحصر أصحاب المصلحة وتحديد التأثير والاهتمام ودور كل طرف.', result:'تنتج خطة إشراك واضحة.'},
+  'رحلة المستفيد': {def:'أداة لفهم تجربة المستفيد عبر المراحل.', how:'تُستخدم لرصد نقاط التماس والألم والفرص.', result:'تنتج فرص تحسين محددة.'},
+  'سجل الأدلة': {def:'أداة توثيق الأدلة والبيانات الداعمة للتحدي أو القرار.', how:'تُدخل فيها الأدلة ومصادرها ودرجة موثوقيتها.', result:'ينتج منها رصيد توثيقي يعزز جودة القرار.'},
+  'شجرة المشكلة الأولية': {def:'أداة لربط المشكلة بأسبابها وآثارها.', how:'تبدأ بالمشكلة المركزية ثم الأسباب ثم الآثار.', result:'رؤية أولية لبنية المشكلة.'},
+  'تحليل AAA': {def:'أداة لقراءة السلطة والقبول والقدرة.', how:'تُستخدم لترتيب الأولويات وفق ما يمكن تحريكه فعليًا.', result:'اختيار أدق لنقطة التدخل.'},
+  'شجرة المشكلة النهائية': {def:'نسخة معتمدة من بنية المشكلة بعد التحليل.', how:'تُستخدم بعد تنقية الأسباب والآثار الداخلة في النطاق.', result:'مشكلة محددة قابلة للحل.'},
+  'SPICE': {def:'أداة لصياغة المشكلة: Situation, Problem, Impact, Causes, Evidence.', how:'تملأ العناصر الخمسة لتكوين توصيف مركز للمشكلة.', result:'صياغة دقيقة مع أدلتها.'},
+  'السبب الجذري': {def:'أداة للبحث عن أصل المشكلة.', how:'تُستخدم لتفكيك المشكلة إلى مستوى جذري.', result:'تحديد نقطة المعالجة الأهم.'},
+  'خمس مرات لماذا': {def:'أداة بسيطة لتتبع الجذر السببي.', how:'يُسأل "لماذا؟" بشكل متكرر حتى الوصول للسبب الأعمق.', result:'فهم السببية الفعلية.'},
+  'مصفوفة الأولوية': {def:'أداة لترتيب القضايا أو الأسباب.', how:'تُقارن العناصر وفق معيار أو أكثر.', result:'تحديد ما يبدأ به أولًا.'},
+  'شجرة الأهداف': {def:'أداة لتحويل المشكلة إلى منطق أهداف.', how:'تربط الهدف العام بالنتائج والوسائل والمخرجات.', result:'تصميم أوضح للحل.'},
+  'تحليل الفجوة': {def:'أداة لقياس الفرق بين الواقع والمستهدف.', how:'يتم تحديد الحالي والمستهدف والفجوة والمتطلبات.', result:'خطة أقرب لسد الفجوة.'},
+  'كيف يمكننا أن؟': {def:'أداة لإعادة صياغة التحدي كسؤال ابتكاري.', how:'تُصاغ بصيغة تحفيز للإبداع تركز على المستفيد والأثر.', result:'أسئلة توليدية للحلول.'},
+  'SCAMPER': {def:'أداة لتوليد أفكار متعددة.', how:'تستخدم محاور التبديل والدمج والتكييف والتعديل وغيرها.', result:'مجموعة حلول أو بدائل إبداعية.'},
+  'خريطة القيمة': {def:'أداة لبلورة القيمة المقترحة للحل.', how:'تربط ما يهم المستفيد بما تقدمه المؤسسة.', result:'حل أوضح وأكثر إقناعًا.'},
+  'مصفوفة الأثر والتنفيذ': {def:'أداة للمفاضلة بين الحلول.', how:'توضع الحلول وفق الأثر وسهولة التنفيذ.', result:'ترتيب الحلول واختيار الأنسب.'},
+  'مصفوفة القرار الموزونة': {def:'أداة مقارنة مفصلة بين البدائل.', how:'تستخدم معايير وأوزانًا ثم تعطي نتيجة نهائية.', result:'قرار أكثر موضوعية.'},
+  'بطاقة التجربة': {def:'أداة لتصميم التجربة الأولية.', how:'تحدد الفرضية والعينة والمدة والمؤشرات وآلية القياس.', result:'خطة تجربة قابلة للتنفيذ.'}
+};
+
+const toolTemplates = {
+  'التمهيد التحليلي':['وصف التحدي','الفئة المتأثرة','المعطيات المتاحة','الفرضيات الأولية','أسئلة تحتاج إلى بحث'],
+  'برادشو':['الاحتياج المستشعر','الاحتياج المعبّر عنه','الاحتياج المعياري','الاحتياج المقارن','الاستنتاج'],
+  'خريطة أصحاب المصلحة':['أصحاب المصلحة الرئيسيون','مستوى التأثير','مستوى الاهتمام','الدور المتوقع','خطة الإشراك'],
+  'رحلة المستفيد':['مراحل الرحلة','نقاط التماس','نقاط الألم','الفرص التحسينية','أهم ملاحظة'],
+  'سجل الأدلة':['مصدر الدليل','نوعه','تاريخه','محتواه الرئيس','درجة الموثوقية'],
+  'شجرة المشكلة الأولية':['المشكلة الجوهرية','الأسباب المباشرة','الأسباب الجذرية','الآثار المباشرة','الآثار الممتدة'],
+  'تحليل AAA':['عنصر التحليل','السلطة Authority','القبول Acceptance','القدرة Ability','أولوية التدخل'],
+  'شجرة المشكلة النهائية':['المشكلة المعتمدة','الأسباب الداخلة في النطاق','الآثار المعتمدة','العناصر المستبعدة','الملحوظات'],
+  'SPICE':['Situation','Problem','Impact','Causes','Evidence'],
+  'السبب الجذري':['المشكلة','السبب 1','السبب 2','السبب 3','النتيجة النهائية'],
+  'خمس مرات لماذا':['المشكلة','لماذا 1','لماذا 2','لماذا 3','لماذا 4','لماذا 5'],
+  'مصفوفة الأولوية':['المجالات أو الأسباب','معيار الأولوية','النتيجة','التوصية'],
+  'شجرة الأهداف':['الهدف العام','النتائج','الوسائل','المخرجات','الافتراضات'],
+  'تحليل الفجوة':['الوضع الحالي','الوضع المستهدف','مقدار الفجوة','ما المطلوب لسد الفجوة'],
+  'كيف يمكننا أن؟':['المستفيد','ما التغيير المطلوب؟','ما الأثر؟','الصياغة النهائية للسؤال'],
+  'SCAMPER':['Substitute','Combine','Adapt','Modify','Put to another use','Eliminate','Reverse'],
+  'خريطة القيمة':['القيمة للمستفيد','القيمة للمؤسسة','العناصر المميزة','التحديات'],
+  'مصفوفة الأثر والتنفيذ':['الحلول المقترحة','الأثر','سهولة التنفيذ','الموقع في المصفوفة','القرار'],
+  'مصفوفة القرار الموزونة':['الخيارات','المعايير','الأوزان','الدرجات','النتيجة النهائية'],
+  'بطاقة التجربة':['الفرضية','العينة أو المستهدف','المدة','المؤشرات','وسيلة جمع النتائج']
+};
+
+const seed = {
+  strategicGoals:[
+    {id:'SG-01',title:'توفير الرعاية الأساسية لليتيم'},
+    {id:'SG-02',title:'بناء اليتيم تعليمياً وتربوياً'},
+    {id:'SG-03',title:'تأهيل اليتيم على المهارات الحياتية'},
+    {id:'SG-04',title:'بناء مهارات الأبناء المستقبلية'},
+    {id:'SG-05',title:'تأهيل أم اليتيم لإدارة شؤون أسرتها'},
+    {id:'SG-06',title:'تهيئة بيئة تعليمية وتربوية متكاملة'},
+    {id:'SG-07',title:'الإسهام في تمكين القطاع غير الربحي'},
+    {id:'SG-08',title:'تعزيز التواصل الفاعل مع المتبرعين'},
+    {id:'SG-09',title:'تحقيق الاستدامة المالية'},
+    {id:'SG-10',title:'ابتكار وصناعة حلول تسهم في تلبية احتياجات المستفيدين'},
+    {id:'SG-11',title:'تعزيز الكفاءة التشغيلية'},
+    {id:'SG-12',title:'تطوير شراكات استراتيجية فاعلة'},
+    {id:'SG-13',title:'تطوير منظومة اتصال مؤسسي فاعل'},
+    {id:'SG-14',title:'تنمية وتنويع مصادر الدخل'},
+    {id:'SG-15',title:'إدارة الأصول بكفاءة وفعالية'},
+    {id:'SG-16',title:'تعزيز قدرات الموارد البشرية وتمكينها'},
+    {id:'SG-17',title:'الاستثمار الأمثل للمتطوعين والمتطوعات'},
+    {id:'SG-18',title:'بناء وتمكين الصف الثاني'},
+    {id:'SG-19',title:'تطوير بيئة عمل مؤسسية وجاذبة'},
+    {id:'SG-20',title:'تحقيق مجتمع رقمي'},
+    {id:'SG-21',title:'تعزيز منظومة القيم المؤسسية'}
+  ],
+  cycles:[
+    {id:'CY-001',title:'دورة جَذوة الأولى',scope:'التحديات التشغيلية ذات الأولوية',start:'2026-08-01',end:'2026-10-30',manager:'إدارة الاستراتيجية وتطوير الأعمال',facilitators:'فريق الابتكار',status:'تنفيذ',budget:'50000',projects:['PR-001','PR-002','PR-003'],currentStep:5}
+  ],
+  logicalFrames:[
+    {id:'LF-001',projectId:'PR-001',rows:[
+      {level:'الأثر',statement:'رفع كفاءة اتخاذ القرار المؤسسي',indicator:'زمن الحصول على التقرير',baseline:'10 أيام',target:'6 أيام',verification:'تقارير التشغيل',assumptions:'التزام الإدارات',owner:'إدارة الاستراتيجية'},
+      {level:'النتيجة',statement:'انخفاض زمن إعداد التقارير',indicator:'متوسط زمن إعداد التقرير',baseline:'10 أيام',target:'6 أيام',verification:'سجل المنصة',assumptions:'استمرار الاستخدام',owner:'مكتب الاستراتيجية'},
+      {level:'المخرج',statement:'منصة تقارير موحدة ومسار اعتماد',indicator:'منصة عاملة',baseline:'غير موجودة',target:'إطلاق نسخة تشغيلية',verification:'محضر الاستلام',assumptions:'توفر التكامل',owner:'تقنية المعلومات'},
+      {level:'النشاط',statement:'تحليل المتطلبات وبناء النموذج واختباره',indicator:'نسبة الإنجاز',baseline:'0%',target:'100%',verification:'خطة المشروع',assumptions:'تفرغ الفريق',owner:'فريق المشروع'}
+    ]}
+  ],
+  opportunities:[
+    {id:'OP-001', title:'شكاوى تأخر التقارير', source:'تقارير داخلية', type:'احتياج', dimension:'العمليات الداخلية', urgency:'عالية', owner:'إدارة الاستراتيجية', summary:'تكرار ملاحظات حول تأخر اكتمال التقارير وغياب القالب الموحد.'},
+    {id:'OP-002', title:'تكرار استفسارات الكفلاء', source:'خدمة المستفيدين', type:'فرصة', dimension:'أصحاب المصلحة', urgency:'متوسطة', owner:'إدارة الاتصال', summary:'فرصة لأتمتة الردود وتحسين تجربة الكفيل.'}
+  ],
+  challenges:[
+    {id:'CH-001', title:'تفاوت جودة التقارير المؤسسية', dimension:'العمليات الداخلية', priority:'عالية', owner:'إدارة الاستراتيجية', evidence:'تفاوت القوالب وتأخر التجميع', source:'تقارير دورية', beneficiary:'الإدارة التنفيذية', summary:'اختلاف نماذج التقارير واختناقات الاعتماد', currentState:'تقارير متعددة القوالب', desiredState:'منصة موحدة واعتماد واضح', urgency:'عالية', status:'نشط'},
+    {id:'CH-002', title:'ضعف التواصل مع الكفلاء', dimension:'أصحاب المصلحة', priority:'عالية', owner:'إدارة الاتصال', evidence:'ملاحظات رضا أصحاب العلاقة', source:'استبيان رضا', beneficiary:'الكفلاء', summary:'تباين في سرعة ودقة التواصل', currentState:'اعتماد على قنوات غير مترابطة', desiredState:'تجربة تواصل موحدة', urgency:'عالية', status:'نشط'},
+    {id:'CH-003', title:'ارتفاع زمن تقديم الخدمة', dimension:'المستفيدون', priority:'متوسطة', owner:'إدارة البرامج', evidence:'متوسط زمن الخدمة 9 أيام', source:'تقارير التشغيل', beneficiary:'المستفيدون', summary:'بطء انتقال الطلب عبر المسار التشغيلي', currentState:'تعدد إحالات وتأخر المتابعة', desiredState:'مسار أسرع وأكثر وضوحًا', urgency:'متوسطة', status:'نشط'}
+  ],
+  ideas:[
+    {id:'ID-001', title:'منصة التقارير المؤسسية', challenge:'CH-001', submitter:'محمد', score:87, status:'مقبولة', summary:'منصة موحدة لإدخال التقارير واعتمادها وإصدارها', value:'تسريع القرار وتحسين الجودة', dimension:'العمليات الداخلية', owner:'إدارة الاستراتيجية'},
+    {id:'ID-002', title:'مساعد الكفيل الرقمي', challenge:'CH-002', submitter:'فريق الاتصال', score:72, status:'تحتاج تطوير', summary:'مساعد رقمي يجيب على الاستفسارات المتكررة', value:'تحسين تجربة الكفيل وخفض الجهد', dimension:'أصحاب المصلحة', owner:'إدارة الاتصال'},
+    {id:'ID-003', title:'مسار الخدمة السريعة', challenge:'CH-003', submitter:'فريق البرامج', score:81, status:'مقبولة', summary:'تبسيط الخطوات وتحديد SLA للخدمة', value:'خفض زمن تقديم الخدمة', dimension:'المستفيدون', owner:'إدارة البرامج'}
+  ],
+  evaluations:[
+    {id:'EV-001', targetType:'فكرة', targetId:'ID-001', model:'مصفاة 100', impact:35, ease:26, alignment:26},
+    {id:'EV-002', targetType:'فكرة', targetId:'ID-002', model:'مصفاة 100', impact:29, ease:22, alignment:21},
+    {id:'EV-003', targetType:'فكرة', targetId:'ID-003', model:'مصفاة 100', impact:32, ease:24, alignment:25}
+  ],
+  projects:[
+    {id:'PR-001', title:'منصة التقارير المؤسسية', owner:'إدارة الاستراتيجية', path:'جماعي', stage:'التطوير', progress:68},
+    {id:'PR-002', title:'مساعد الكفيل الرقمي', owner:'إدارة الاتصال', path:'جماعي', stage:'التحديد', progress:42},
+    {id:'PR-003', title:'مسار الخدمة السريعة', owner:'إدارة البرامج', path:'فردي', stage:'الاستكشاف', progress:30}
+  ],
+  tools:[
+    {id:'TL-001', tool:'التمهيد التحليلي', stage:'الاستكشاف', title:'تمهيد منصة التقارير', values:{'وصف التحدي':'تفاوت القوالب','الفئة المتأثرة':'المديرون وصناع القرار','المعطيات المتاحة':'تقارير متفرقة','الفرضيات الأولية':'التأخير سببه تعدد القوالب','أسئلة تحتاج إلى بحث':'ما الحجم الفعلي للوقت المهدور؟'}},
+    {id:'TL-002', tool:'SPICE', stage:'التحديد', title:'صياغة مشكلة منصة التقارير', values:{Situation:'تعدد الإدارات',Problem:'تأخر التقارير',Impact:'ضعف القرار',Causes:'غياب مسار موحد',Evidence:'عينات من تقارير سابقة'}}
+  ],
+  gates:[
+    {id:'GT-001', gate:'بوابة 1', itemType:'مشروع', itemId:'PR-003', need:3, feasibility:2, sustainability:2, value:3, decision:'الانتقال إلى التحديد', notes:'الاحتياج ثابت ويحتاج تعميقًا', authority:'إدارة الابتكار + الإدارة المالكة', decisionMaker:'خالد', date:'', evidence:'متوسط زمن الخدمة 9 أيام', stakeholders:'المستفيدون وفريق البرامج', changeReason:'تكرار التأخير في أكثر من دورة', risks:'نقص البيانات التفصيلية', outputs:{a:true,b:true,c:false,d:false}},
+    {id:'GT-002', gate:'بوابة 2', itemType:'مشروع', itemId:'PR-002', need:3, feasibility:2, sustainability:2, value:2, decision:'تطوير محدود', notes:'يلزم تحسين خط الأساس', authority:'الإدارة المالكة + إدارة الابتكار', decisionMaker:'فريق التحديد', date:'', evidence:'نتائج رضا الكفلاء', stakeholders:'إدارة الاتصال والكفلاء', changeReason:'وجود فجوة في بيانات الاتصال', risks:'جودة قاعدة البيانات', outputs:{a:true,b:true,c:true,d:false}},
+    {id:'GT-003', gate:'بوابة 3', itemType:'مشروع', itemId:'PR-001', need:3, feasibility:3, sustainability:2, value:3, decision:'جاهز للتجربة', notes:'الميزانية مقبولة', authority:'إدارة الاستراتيجية وتطوير الأعمال', decisionMaker:'لجنة الاعتماد', date:'', evidence:'مصفوفة القرار الموزونة', stakeholders:'الاستراتيجية وتقنية المعلومات', changeReason:'الحل المختار يحقق أفضل أثر', risks:'التكامل والالتزام بالاستخدام', outputs:{a:true,b:true,c:true,d:true}},
+    {id:'GT-004', gate:'بوابة 4', itemType:'مشروع', itemId:'PR-001', need:3, feasibility:3, sustainability:3, value:3, decision:'تبنٍ وتطبيق', notes:'تم تحقيق نتائج قريبة من المستهدف', authority:'الإدارة التنفيذية العليا', decisionMaker:'المدير التنفيذي', date:'', evidence:'نتائج اختبار موثقة مقارنة بخط الأساس', stakeholders:'الإدارة التنفيذية والإدارات المالكة', changeReason:'تحقق الأثر وانخفاض الزمن', risks:'استدامة التبني', outputs:{a:true,b:true,c:true,d:true}}
+  ],
+  scope:[
+    {id:'SC-001', projectId:'PR-001', inScope:'توحيد القوالب وسير الاعتماد وإنتاج التقارير', outScope:'إعادة بناء الأنظمة المالية المصدرية', constraints:'الميزانية، تكامل البيانات، صلاحيات الإدارات'}
+  ],
+  solutions:[
+    {id:'SL-001', projectId:'PR-001', title:'منصة تقارير مؤسسية موحدة', impact:5, ease:4, sustainability:4, risk:'متوسطة', decision:'مختار'},
+    {id:'SL-002', projectId:'PR-001', title:'توحيد القوالب فقط', impact:3, ease:5, sustainability:2, risk:'منخفضة', decision:'بديل'}
+  ],
+  prototypes:[
+    {id:'PT-001', projectId:'PR-001', hypothesis:'إذا تم توحيد التدفق، ينخفض زمن إعداد التقرير 40%', prototype:'واجهة إدخال + قالب تقرير + مسار اعتماد', testPlan:'إدارتان، 30 يومًا، 4 تقارير', metrics:'الزمن، الجودة، عدد التعديلات، رضا المستخدم', budget:'تقدير أولي 35 ألف ريال', risks:'البيانات، الاستخدام، التكامل'}
+  ],
+  experiments:[
+    {id:'EX-001', projectId:'PR-001', hypothesis:'خفض زمن إعداد التقرير 40%', baseline:'10 أيام', target:'6 أيام', result:'7 أيام', status:'جارية'}
+  ],
+  followups:[
+    {id:'FU-001', projectId:'PR-001', baseline:'10 أيام', indicators:'زمن التقرير، رضا المستخدم، نسبة اكتمال التقرير', dataSource:'تقارير التشغيل واستبيان المستخدم', periodicity:'أسبوعي', quantitative:'انخفض المتوسط إلى 7 أيام', qualitative:'تحسن وضوح التوقعات لدى المستخدمين', recommendation:'الاستمرار مع توسيع التطبيق'}
+  ],
+  approvals:[
+    {id:'AP-001', projectId:'PR-001', action:'تعميم تدريجي', status:'قيد التنفيذ', owner:'إدارة الاستراتيجية', date:'', departments:'الإدارة التنفيذية وإدارتان تجريبيتان', plan:'التوسع على مرحلتين بعد اعتماد النتائج', requirements:'تدريب المستخدمين وتثبيت صلاحيات الاعتماد', notes:'مراجعة الأثر بعد 60 يومًا', documentToKnowledge:true}
+  ],
+  knowledge:[
+    {id:'KN-001', title:'دليل موحد للتقارير', type:'معرفة', status:'نشط', linked:'PR-001', lesson:'توحيد القوالب وحده غير كافٍ دون سير اعتماد وأتمتة.', details:'وثيقة مرجعية للأدلة والدروس والكلمات المفتاحية.', keywords:'تقارير، اعتماد، أتمتة'},
+    {id:'KN-002', title:'حملة تواصل سابقة', type:'تجربة متوقفة', status:'متوقفة', linked:'CH-002', lesson:'توقفت بسبب ضعف بيانات الاتصال، ويجب تنظيف القاعدة قبل إعادة المحاولة.', details:'مرجع للحملات السابقة وسبب إيقافها.', keywords:'كفلاء، تواصل، بيانات'}
+  ],
+  activities:[
+    'تحديث تصميم صفحة البوابات',
+    'إضافة صفحة مرصد الفرص والاحتياجات',
+    'إضافة مادة جديدة إلى بنك المعرفة'
+  ]
+};
+
+let data = JSON.parse(localStorage.getItem('jadwa_method_aligned_v6') || localStorage.getItem('jadwa_method_aligned_v4') || 'null') || seed;
+ensureShape();
+// ترحيل آمن للبيانات القديمة دون تغيير هيكل المنصة
+(data.challenges||[]).forEach(x=>{ if(!x.goal && Array.isArray(x.goals)) x.goal=x.goals[0]||''; });
+(data.ideas||[]).forEach(x=>{ if(!x.goal && Array.isArray(x.goals)) x.goal=x.goals[0]||''; });
+// مصفاة الفرز الأولي أصبحت داخل بطاقة الفكرة، والتقييم المنهجي هو الوحيد في صفحة التقييم
+(data.evaluations||[]).filter(e=>e.model==='مصفاة 100' && e.targetType==='فكرة').forEach(e=>{ const i=data.ideas.find(x=>x.id===e.targetId); if(i && !i.screening) i.screening={impact:+e.impact||0,ease:+e.ease||0,alignment:+e.alignment||0}; });
+data.evaluations=(data.evaluations||[]).filter(e=>e.model!=='مصفاة 100');
+
+const phases = [
+  {key:'exploration', title:'الاستكشاف', desc:'نفهم ونثبت الاحتياج', subs:[['challenges','تحديات جذوة'],['ideas','بوابة الأفكار'],['screening','مصفاة التقييم'],['discoveryLab','الاستكشاف المتعمق'],['gate1','بوابة 1: الاستكشاف والقبول', true]]},
+  {key:'definition', title:'التحديد', desc:'نحدد المشكلة والنطاق', subs:[['problem','صياغة المشكلة'],['scope','نطاق التدخل'],['definitionTools','أدوات التحديد'],['gate2','بوابة 2: اعتماد المشكلة والنطاق', true]]},
+  {key:'development', title:'التطوير', desc:'نبتكر ونهيئ الحل', subs:[['solutions','اختيار الحل'],['prototype','النموذج الأولي وخطة التجربة'],['developmentTools','أدوات التطوير'],['gate3','بوابة 3: اعتماد الحل وجاهزية التجربة', true]]},
+  {key:'delivery', title:'التسليم', desc:'ننّفذ ونقيس ونوثق', subs:[['experiments','تجارب جذوة'],['followup','المتابعة وقياس الأثر'],['logical','مصفوفة الإطار المنطقي'],['impact','أثر جذوة'],['approval','الاعتماد والتعميم'],['gate4','بوابة 4: القرار النهائي', true]]}
+];
+
+const titles = {
+  dashboard:['لوحة القيادة','رؤية مؤسسية مترابطة تدعم القرار وتكشف الأولويات والاختناقات والأثر.'],
+  observatory:['مرصد الفرص والاحتياجات','بوابة تغذية مستمرة للتحديات والفرص المستندة إلى الواقع والبيانات.'],
+  cycles:['دورات معمل جَذوة','إدارة الدورات التشغيلية والمسارات والفرق والعيادات والمخرجات.'],
+  portfolio:['محفظة الابتكار','تتبع جميع المشروعات ومساراتها ومراحلها.'],
+  knowledge:['بنك المعرفة','ذاكرة الابتكار المؤسسية ومنع تكرار الجهود.'],
+  rewards:['التحفيز والتكريم','تحفيز مرتبط بالنقاط والأوسمة المتدرجة.'],
+  settings:['الإعدادات والصلاحيات','إدارة الأدوار والضوابط وآليات التقييم.']
+};
+
+function ensureShape(){
+  const defaults = ['strategicGoals','cycles','logicalFrames','opportunities','challenges','ideas','evaluations','projects','tools','gates','scope','solutions','prototypes','experiments','followups','approvals','knowledge','activities'];
+  defaults.forEach(k=>{ if(!Array.isArray(data[k])) data[k]=[];});
+  // توحيد الربط الاستراتيجي القديم والجديد مع الحفاظ على البيانات السابقة.
+  [...data.challenges,...data.ideas].forEach(item=>{
+    if(!Array.isArray(item.goals)) item.goals=item.goal?[item.goal]:[];
+    item.goals=[...new Set(item.goals.filter(Boolean))];
+    item.goal=item.goals[0]||'';
+  });
+  // ترحيل تقييمات الفرز الأولي القديمة إلى بطاقة الفكرة حتى لا تمنع التقييم المنهجي.
+  const keep=[];
+  data.evaluations.forEach(e=>{
+    if(e.model==='مصفاة 100' && e.targetType==='فكرة'){
+      const idea=data.ideas.find(i=>i.id===e.targetId);
+      if(idea && !idea.screening){
+        idea.screening={impact:+e.impact||0,ease:+e.ease||0,alignment:+e.alignment||0};
+        idea.score=(+e.impact||0)+(+e.ease||0)+(+e.alignment||0);
+      }
+    }else keep.push(e);
+  });
+  data.evaluations=keep;
+}
+function saveData(){ localStorage.setItem('jadwa_method_aligned_v6', JSON.stringify(data)); renderAll(); }
+function badgeClass(txt=''){
+  if(['مقبولة','جاهز','نشط','مختار','عالية','تبنٍ','تطبيق'].some(x=>txt.includes(x))) return 'green';
+  if(['تطوير','جارية','بديل','متوسطة','قيد'].some(x=>txt.includes(x))) return 'amber';
+  if(['متوقفة','إيقاف','منخفضة','مرفوضة'].some(x=>txt.includes(x))) return 'red';
+  return 'gray';
+}
+function findTitle(collection,id){ const arr=data[collection]||[]; const item=arr.find(x=>x.id===id); return item ? (item.title || item.name || id) : id; }
+function targetName(type,id){ if(type==='فكرة') return findTitle('ideas',id); if(type==='تحدي') return findTitle('challenges',id); return findTitle('projects',id); }
+function evaluationTotal(e){ return e.model==='مصفاة 100' ? (+e.impact||0)+(+e.ease||0)+(+e.alignment||0) : (+e.need||0)+(+e.feasibility||0)+(+e.sustainability||0)+(+e.value||0); }
+function evaluationRecommendation(e){ const total=evaluationTotal(e); if(e.model==='مصفاة 100'){ return total>=80 ? 'أولوية مرتفعة' : total>=60 ? 'تطوير' : 'حاضنة'; } if(+e.need===1 || +e.value===1) return 'لا يجتاز — قاعدة ضابطة'; return total>=10 ? 'جاهز' : total>=7 ? 'تطوير محدود' : 'إعادة تطوير'; }
+function gateTotal(g){ return (+g.need||0)+(+g.feasibility||0)+(+g.sustainability||0)+(+g.value||0); }
+function recommendFromGate(total,g=null){ if(g && (+g.need===1 || +g.value===1)) return 'لا يجتاز — قاعدة ضابطة'; if(total>=10) return 'جاهز'; if(total>=7) return 'تطوير محدود'; return 'إعادة تطوير'; }
+function percent(v,total){ return Math.round(((v||0)/Math.max(1,total))*100); }
+function numeric(s){ return parseFloat(String(s||'').replace(/[^\d.]/g,'')) || 0; }
+function challengeDimensionCounts(){
+  const dims=['المستفيدون','أصحاب المصلحة','العمليات الداخلية','التعلم والنمو','البعد المالي'];
+  return dims.map(d=>({dim:d,count:data.challenges.filter(c=>c.dimension===d).length}));
+}
+
+function createSidebar(){
+  const root=document.getElementById('phaseNav');
+  phases.forEach((p,idx)=>{
+    const el=document.createElement('div');
+    el.className='phase-group'+(idx===0?' open':'');
+    el.innerHTML=`<button class="phase-head" onclick="this.parentElement.classList.toggle('open')"><div class="phase-meta"><div class="phase-no">${idx+1}</div><div class="phase-title"><b>${p.title}</b><small>${p.desc}</small></div></div><div>⌄</div></button><div class="phase-body">${p.subs.map(s=>`<button class="sub-btn ${s[2]?'gate-sub':''}" onclick="openPage('${p.key}_${s[0]}',this)">${s[1]}</button>`).join('')}</div>`;
+    root.appendChild(el);
+  });
+}
+
+function pageShell(id,title,body){ return `<section class="page" id="${id}"><div class="card"><div class="card-head"><h3>${title}</h3></div>${body}</div></section>`; }
+
+function buildPages(){
+  const root=document.getElementById('phasePages'); root.innerHTML='';
+
+  root.insertAdjacentHTML('beforeend', pageShell('exploration_challenges','تحديات جذوة', `
+    <div class="card-head"><div class="notice">نعم، يُستحسن أن تكون بطاقة التحدي أكثر شمولًا. لذلك أُضيفت هنا عناصر موسعة مثل: المصدر، الفئة المستفيدة، الوضع الحالي، الوضع المأمول، الملخص، والدليل.</div><button class="btn primary" onclick="openForm('challenge')">+ تحدٍ جديد</button></div><br>
+    <div id="challengeList" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('exploration_ideas','بوابة الأفكار', `
+    <div class="card-head"><div class="notice">تم توسيع بطاقة الفكرة لتشمل وصفًا مختصرًا، القيمة المقترحة، البعد، والمالك، مع دعم التعديل والحذف والكشف عن التكرار.</div><button class="btn primary" onclick="openForm('idea')">+ فكرة جديدة</button></div><br>
+    <div id="ideaList" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('exploration_screening','مصفاة التقييم', `
+    <div class="card-head"><div class="notice">الأصل الاكتفاء بتقييم واحد أساسي، ويمكن إضافة تقييم تكميلي عند الحاجة. لذلك تستطيع المنصة حفظ أكثر من تقييم لنفس الفكرة أو التحدي مع بيان نوع النموذج.</div><button class="btn primary" onclick="openForm('evaluation')">+ تقييم جديد</button></div><br>
+    <div id="evaluationList" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('exploration_discoveryLab','الاستكشاف المتعمق', `
+    <div class="card-head"><div class="notice">أضيف لكل أداة: تعريف مختصر، طريقة استخدام، والنتيجة المتوقعة، مع زر مستقل للتعريف وزر آخر لفتح الأداة.</div><div class="filters"><select id="exploreToolPicker">${['التمهيد التحليلي','برادشو','خريطة أصحاب المصلحة','رحلة المستفيد','سجل الأدلة','شجرة المشكلة الأولية'].map(t=>`<option>${t}</option>`).join('')}</select><button class="btn primary" onclick="openToolForm(document.getElementById('exploreToolPicker').value,'الاستكشاف')">+ فتح الأداة</button></div></div><br>
+    <div id="toolGridExploration" class="tool-grid"></div><br><div id="toolListExploration" class="record-grid"></div><br><div class="card" style="box-shadow:none;background:#f7fbf9"><div class="card-head"><div><h3>التحليل الذكي للاستكشاف</h3><div class="note-sm">تحليل تجميعي مبني على مدخلات أداة واحدة أو جميع الأدوات المحفوظة في مرحلة الاستكشاف.</div></div><button class="btn primary" onclick="generateDiscoveryAnalysis()">توليد التحليل</button></div><div id="discoveryAIResult" class="notice">احفظ أداة واحدة على الأقل ثم اضغط «توليد التحليل».</div></div>`));
+
+  root.insertAdjacentHTML('beforeend', gateWorkspacePage('exploration_gate1', 'البوابة الأولى: الاستكشاف والقبول', 'هل ثبت الاحتياج، واتضحت الفئة المستفيدة والأدلة والأولوية؟', 'إدارة الابتكار + الإدارة المالكة', 'الاستكشاف'));
+
+  root.insertAdjacentHTML('beforeend', pageShell('definition_problem','صياغة المشكلة', `
+    <div class="notice">يمكن صياغة المشكلة عبر SPICE أو شجرة المشكلة النهائية أو السبب الجذري. كل أداة تفتح بنموذجها الداخلي مع تعريفها المختصر.</div><br>
+    <div id="toolGridDefinitionProblem" class="tool-grid"></div><br><div id="toolListDefinition" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('definition_scope','نطاق التدخل', `
+    <div class="card-head"><div class="notice">إتاحة إضافة نطاق التدخل وتعديله: داخل النطاق، خارج النطاق، والقيود.</div><button class="btn primary" onclick="openForm('scope')">+ إضافة نطاق</button></div><br><div id="scopeList" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('definition_definitionTools','أدوات التحديد', `
+    <div id="toolGridDefinition" class="tool-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', gateWorkspacePage('definition_gate2', 'البوابة الثانية: اعتماد المشكلة والنطاق', 'هل المشكلة محددة بوضوح ونطاق التدخل مضبوط وقابل للتنفيذ؟', 'الإدارة المالكة + إدارة الابتكار', 'التحديد'));
+
+  root.insertAdjacentHTML('beforeend', pageShell('development_solutions','اختيار الحل', `
+    <div class="card-head"><div class="notice">إمكانية إضافة الحلول، تعديلها، أو حذفها، ثم اختيار الحل المعتمد وبيان السبب.</div><button class="btn primary" onclick="openForm('solution')">+ إضافة حل</button></div><br>
+    <div class="table-wrap"><table><thead><tr><th>المشروع</th><th>الحل</th><th>الأثر</th><th>سهولة التنفيذ</th><th>الاستدامة</th><th>المخاطر</th><th>القرار</th><th>الإجراء</th></tr></thead><tbody id="solutionBody"></tbody></table></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('development_prototype','النموذج الأولي وخطة التجربة', `
+    <div class="card-head"><div class="notice">إمكانية الإضافة والتعديل والحذف لفرضية التجربة، النموذج الأولي، خطة الاختبار، الميزانية، المخاطر، والمؤشرات.</div><button class="btn primary" onclick="openForm('prototype')">+ إضافة نموذج أولي</button></div><br><div id="prototypeList" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('development_developmentTools','أدوات التطوير', `
+    <div id="toolGridDevelopment" class="tool-grid"></div><br><div id="toolListDevelopment" class="record-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', gateWorkspacePage('development_gate3', 'البوابة الثالثة: اعتماد الحل وجاهزية التجربة', 'هل الحل مناسب ومهيأ للتجربة، وهل مؤشرات الاختبار والميزانية والمخاطر واضحة؟', 'إدارة الاستراتيجية وتطوير الأعمال', 'التطوير'));
+
+  root.insertAdjacentHTML('beforeend', pageShell('delivery_experiments','تجارب جذوة', `
+    <div class="card-head"><div class="notice">إدارة التجارب: إضافة وتعديل وحذف، مع نتائج خط الأساس والمستهدف والمتحقق والحالة.</div><button class="btn primary" onclick="openForm('experiment')">+ إضافة تجربة</button></div><br>
+    <div class="table-wrap"><table><thead><tr><th>المشروع</th><th>الفرضية</th><th>خط الأساس</th><th>المستهدف</th><th>المتحقق</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody id="experimentBody"></tbody></table></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('delivery_followup','المتابعة وقياس الأثر', `
+    <div class="card-head"><div class="notice">صفحة منبثقة داخل مرحلة التسليم لمتابعة التنفيذ وقياس الأثر بصورة تفصيلية: خط الأساس، المؤشرات، مصدر البيانات، التواتر، النتائج الكمية والنوعية، والتوصية.</div><button class="btn primary" onclick="openForm('followup')">+ إضافة متابعة</button></div><br><div id="followupList" class="record-grid"></div>`));
+
+
+  root.insertAdjacentHTML('beforeend', pageShell('delivery_logical','مصفوفة الإطار المنطقي', `
+    <div class="card-head"><div class="notice">تربط المصفوفة بين الأثر والنتائج والمخرجات والأنشطة، مع المؤشرات وخط الأساس والمستهدف ووسائل التحقق والافتراضات والمسؤول.</div><button class="btn primary" onclick="openForm('logical')">+ إضافة مصفوفة</button></div><br><div id="logicalList"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('delivery_impact','أثر جذوة', `
+    <div class="notice">يعرض أثر التجارب وحصيلة المتابعة وقياس الأثر على مستوى المحفظة.</div><br><div class="grid4" id="impactKpis"></div>`));
+
+  root.insertAdjacentHTML('beforeend', pageShell('delivery_approval','الاعتماد والتعميم', `
+    <div class="card-head"><div class="notice">هذه صفحة تنفيذية لاتخاذ إجراءات ما بعد القرار: اعتماد الإطلاق، التعميم التدريجي، نقل الملكية، تحديد المسؤوليات والمتطلبات، ومتابعة حالة التنفيذ. ويُرحّل التوثيق إلى بنك المعرفة تلقائيًا عند اختياره.</div><button class="btn primary" onclick="openForm('approval')">+ إضافة إجراء اعتماد / تعميم</button></div><br><div id="approvalList" class="approval-grid"></div>`));
+
+  root.insertAdjacentHTML('beforeend', gateWorkspacePage('delivery_gate4', 'البوابة الرابعة: القرار النهائي', 'هل أثبتت التجربة أثرًا وقيمة واستدامة تبرر الإطلاق أو التعميم؟', 'الإدارة التنفيذية العليا', 'التسليم'));
+}
+
+function gateWorkspacePage(id, title, question, authority, phase){
+  return `<section class="page" id="${id}">
+    <div class="card">
+      <div class="card-head"><h3>${title}</h3><button class="btn primary" onclick="openForm('gate','${title}')">+ إضافة قرار</button></div>
+      <div class="notice">صُممت صفحة القرار لتكون متكاملة وواضحة: المعطيات الإلزامية، الأدلة والمخاطر، الروابط مع بقية مكونات المنصة، معايير التقييم الحاكمة، والنتيجة النهائية.</div>
+      <br>
+      <div class="gate-workspace">
+        <div class="gate-side"><div class="gate-panel" id="${id}_side"></div></div>
+        <div class="gate-main" id="${id}_main"></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderAll(){
+  document.getElementById('kc').textContent = data.challenges.length;
+  document.getElementById('ki').textContent = data.ideas.length;
+  document.getElementById('kp').textContent = data.projects.length;
+  document.getElementById('ke').textContent = data.experiments.length;
+  document.getElementById('kg').textContent = data.gates.length;
+  document.getElementById('kk').textContent = data.knowledge.length;
+
+  renderDashboard();
+  renderObservatory();
+  renderCycles();
+  renderPortfolio();
+  renderChallenges();
+  renderIdeas();
+  renderEvaluations();
+  renderToolGrids();
+  renderToolsByStage();
+  renderScope();
+  renderSolutions();
+  renderPrototypes();
+  renderExperiments();
+  renderFollowups();
+  renderLogicalFrames();
+  renderImpact();
+  renderApprovals();
+  renderKnowledge();
+  renderRewards();
+  renderGateWorkspace('exploration_gate1','بوابة 1','الاستكشاف', 'هل ثبت الاحتياج، واتضحت الفئة المستفيدة والأدلة والأولوية؟', 'إدارة الابتكار + الإدارة المالكة');
+  renderGateWorkspace('definition_gate2','بوابة 2','التحديد', 'هل المشكلة محددة بوضوح ونطاق التدخل مضبوط وقابل للتنفيذ؟', 'الإدارة المالكة + إدارة الابتكار');
+  renderGateWorkspace('development_gate3','بوابة 3','التطوير', 'هل الحل مناسب ومهيأ للتجربة، وهل مؤشرات الاختبار والميزانية والمخاطر واضحة؟', 'إدارة الاستراتيجية وتطوير الأعمال');
+  renderGateWorkspace('delivery_gate4','بوابة 4','التسليم', 'هل أثبتت التجربة أثرًا وقيمة واستدامة تبرر الإطلاق أو التعميم؟', 'الإدارة التنفيذية العليا');
+}
+
+function renderDashboard(){
+  const totalChallenges = Math.max(1,data.challenges.length);
+  const acceptedIdeas = data.ideas.filter(x=>x.status.includes('مقبولة')).length;
+  const experimentsSuccess = data.experiments.filter(e=> numeric(e.target) && numeric(e.result) <= numeric(e.target)).length;
+  const readyGates = data.gates.filter(g=>gateTotal(g)>=10).length;
+  const donutItems = [
+    {label:'نسبة قبول الأفكار', val:percent(acceptedIdeas,data.ideas.length), color:'var(--primary2)'},
+    {label:'نجاح التجارب', val:percent(experimentsSuccess,data.experiments.length), color:'var(--gold)'},
+    {label:'جاهزية البوابات', val:percent(readyGates,data.gates.length), color:'var(--blue)'},
+    {label:'توثيق المعرفة', val:percent(data.knowledge.length, data.projects.length + data.experiments.length), color:'var(--teal)'}
+  ];
+  document.getElementById('dashboardDonuts').innerHTML = donutItems.map((d,i)=>`<div class="metric-donut"><div class="ring" style="--pct:${d.val};background:conic-gradient(${d.color} calc(${d.val}*1%), #edf1ef 0)"><span>${d.val}%</span></div><b>${d.label}</b><div class="note-sm">مؤشر بصري سريع</div></div>`).join('');
+
+  const dims = challengeDimensionCounts();
+  document.getElementById('dimensionBoard').innerHTML = dims.map(d=>`<div class="dimension-item"><div class="card-head"><h4>${d.dim}</h4><span class="badge ${d.count? 'blue':'gray'}">${percent(d.count,totalChallenges)}%</span></div><div class="progress"><span style="width:${percent(d.count,totalChallenges)}%"></span></div><div class="note-sm">${d.count} تحدٍ من أصل ${data.challenges.length}</div></div>`).join('');
+
+  const stages=['الاستكشاف','التحديد','التطوير','التسليم'];
+  document.getElementById('stageBars').innerHTML = stages.map(stage=>{ const n=data.projects.filter(p=>p.stage===stage).length; return `<div class="bar-row"><b>${stage}</b><div class="bar"><span style="width:${percent(n,data.projects.length)}%"></span></div><strong>${n}</strong></div>`; }).join('');
+
+  const gateNames=['بوابة 1','بوابة 2','بوابة 3','بوابة 4'];
+  document.getElementById('gatePerf').innerHTML = gateNames.map(g=>{
+    const rows=data.gates.filter(x=>x.gate===g); const avg=rows.length ? (rows.reduce((a,b)=>a+gateTotal(b),0)/rows.length).toFixed(1) : '0';
+    const accepted=rows.filter(x=>gateTotal(x)>=10).length; const develop=rows.filter(x=>gateTotal(x)>=7 && gateTotal(x)<10).length;
+    return `<tr><td>${g}</td><td>${rows.length}</td><td>${avg}</td><td>${accepted}</td><td>${develop}</td></tr>`;
+  }).join('');
+
+  document.getElementById('executiveSummary').innerHTML = [
+    `أعلى بعد حاضر في التحديات: <b>${dims.sort((a,b)=>b.count-a.count)[0].dim}</b>.`,
+    `الأفكار المقبولة حاليًا: <b>${acceptedIdeas}</b> من أصل <b>${data.ideas.length}</b>.`,
+    `عدد عناصر المرصد الجاهزة للتحويل إلى تحديات: <b>${data.opportunities.length}</b>.`,
+    `المواد المعرفية المتوقفة التي تصلح للتعلم من الفشل: <b>${data.knowledge.filter(k=>k.status==='متوقفة').length}</b>.`
+  ].map(x=>`<div class="quick-item">${x}</div>`).join('');
+
+  document.getElementById('signals').innerHTML = [
+    `عدد الأفكار التي تحتاج تطويرًا: ${data.ideas.filter(x=>x.status.includes('تطوير')).length}`,
+    `عدد الحلول المختارة: ${data.solutions.filter(x=>x.decision==='مختار').length}`,
+    `عدد مواد المعرفة المتوقفة: ${data.knowledge.filter(x=>x.status==='متوقفة').length}`,
+    `نسبة السجلات التي اجتازت البوابات: ${percent(readyGates,data.gates.length)}%`
+  ].map(t=>`<div class="event"><span class="event-dot"></span><div>${t}</div></div>`).join('');
+  document.getElementById('recent').innerHTML = data.activities.slice(0,6).map(t=>`<div class="event"><span class="event-dot"></span><div>${t}</div></div>`).join('');
+}
+
+function renderObservatory(){
+  document.getElementById('opportunityList').innerHTML = data.opportunities.map(o=>`
+    <div class="record-card">
+      <div class="record-meta"><span class="badge ${badgeClass(o.urgency)}">${o.type}</span><span class="badge ${badgeClass(o.urgency)}">${o.urgency}</span><span class="tag">${o.id}</span></div>
+      <h4>${o.title}</h4>
+      <p><b>المصدر:</b> ${o.source}</p>
+      <p><b>البعد:</b> ${o.dimension}</p>
+      <p><b>المالك:</b> ${o.owner}</p>
+      <p>${o.summary}</p>
+      <div class="actions-sm"><button class="btn soft" onclick="openForm('opportunity','${o.id}')">تعديل</button><button class="btn gold-btn" onclick="convertOpportunityToChallenge('${o.id}')">تحويل إلى تحدٍ</button><button class="btn danger" onclick="deleteItem('opportunities','${o.id}')">حذف</button></div>
+    </div>`).join('') || '<div class="empty">لا توجد فرص أو احتياجات مسجلة.</div>';
+}
+
+
+function renderCycles(){
+  const root=document.getElementById('cycleList'); if(!root) return;
+  const steps=['استقبال التحديات','الفرز وتحديد الأولويات','تحديد المسار','تشكيل الفرق وإعلان الانطلاق','تنفيذ المراحل والعيادات','اختبار النماذج وتحسينها','إعداد عرض التبني أو التمويل','العرض أمام أصحاب القرار','نقل التنفيذ ومتابعة القياس'];
+  root.innerHTML=data.cycles.map(c=>`<div class="cycle-card"><div class="record-meta"><span class="badge ${badgeClass(c.status)}">${c.status}</span><span class="tag">${c.id}</span></div><h4>${c.title}</h4><p><b>النطاق:</b> ${c.scope}</p><p><b>المدة:</b> ${c.start||'—'} إلى ${c.end||'—'}</p><p><b>مدير الدورة:</b> ${c.manager}</p><p><b>الميسرون:</b> ${c.facilitators}</p><p><b>المشروعات:</b> ${(c.projects||[]).map(id=>findTitle('projects',id)).join('، ')||'—'}</p><div class="cycle-steps">${steps.map((s,i)=>`<div class="cycle-step ${i+1<c.currentStep?'done':i+1===c.currentStep?'current':''}"><b>${i+1}</b><br>${s}</div>`).join('')}</div><br><div class="actions-sm"><button class="btn soft" onclick="openForm('cycle','${c.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('cycles','${c.id}')">حذف</button></div></div>`).join('')||'<div class="empty">لا توجد دورات.</div>';
+}
+function renderLogicalFrames(){
+  const root=document.getElementById('logicalList'); if(!root) return;
+  root.innerHTML=data.logicalFrames.map(lf=>`<div class="logic-card"><div class="card-head"><h3>${findTitle('projects',lf.projectId)}</h3><div class="logic-actions"><button class="btn soft" onclick="openForm('logical','${lf.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('logicalFrames','${lf.id}')">حذف</button></div></div><div class="table-wrap"><table class="logic-table"><thead><tr><th>المستوى</th><th>الصياغة</th><th>المؤشر</th><th>خط الأساس</th><th>المستهدف</th><th>وسيلة التحقق</th><th>الافتراضات</th><th>المسؤول</th></tr></thead><tbody>${(lf.rows||[]).map(r=>`<tr><td class="logic-level">${r.level}</td><td>${r.statement}</td><td>${r.indicator}</td><td>${r.baseline}</td><td>${r.target}</td><td>${r.verification}</td><td>${r.assumptions}</td><td>${r.owner}</td></tr>`).join('')}</tbody></table></div></div>`).join('')||'<div class="empty">لا توجد مصفوفات إطار منطقي.</div>';
+}
+
+function renderPortfolio(){
+  const q=(document.getElementById('portfolioSearch')?.value||'').toLowerCase();
+  const s=document.getElementById('portfolioStage')?.value||'';
+  document.getElementById('portfolioBody').innerHTML = data.projects.filter(p=>(!s||p.stage===s)&&(!q||p.title.toLowerCase().includes(q))).map(p=>`
+    <tr><td>${p.id}</td><td><b>${p.title}</b></td><td>${p.owner}</td><td>${p.path}</td><td><span class="badge ${badgeClass(p.stage)}">${p.stage}</span></td><td><div class="progress"><span style="width:${p.progress}%"></span></div><small>${p.progress}%</small></td><td><button class="btn outline" onclick="openProject('${p.id}')">فتح</button></td></tr>`).join('');
+}
+
+function renderChallenges(){
+  document.getElementById('challengeList').innerHTML = data.challenges.map(c=>`
+    <div class="record-card">
+      <div class="record-meta"><span class="badge ${badgeClass(c.priority)}">${c.priority}</span><span class="badge blue">${c.dimension}</span><span class="tag">${c.id}</span></div>
+      <h4>${c.title}</h4>
+      <p><b>المالك:</b> ${c.owner}</p><p><b>الأهداف الاستراتيجية:</b> ${formatStrategicGoals(c)}</p>
+      <p><b>المصدر:</b> ${c.source || '—'}</p>
+      <p><b>الفئة المستفيدة:</b> ${c.beneficiary || '—'}</p>
+      <p><b>ملخص التحدي:</b> ${c.summary || ''}</p>
+      <p><b>الوضع الحالي:</b> ${c.currentState || ''}</p>
+      <p><b>الوضع المأمول:</b> ${c.desiredState || ''}</p>
+      <p><b>الدليل:</b> ${c.evidence}</p>
+      <div class="actions-sm"><button class="btn soft" onclick="openForm('challenge','${c.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('challenges','${c.id}')">حذف</button></div>
+    </div>`).join('');
+}
+
+function renderIdeas(){
+  document.getElementById('ideaList').innerHTML = data.ideas.map(i=>`
+    <div class="record-card">
+      <div class="record-meta"><span class="badge ${badgeClass(i.status)}">${i.status}</span><span class="badge violet">${i.dimension || '—'}</span><span class="tag">${i.id}</span></div>
+      <h4>${i.title}</h4>
+      <p><b>مرتبطة بالتحدي:</b> ${findTitle('challenges',i.challenge)}</p>
+      <p><b>المقدم:</b> ${i.submitter}</p>
+      <p><b>المالك:</b> ${i.owner || '—'}</p><p><b>الأهداف الاستراتيجية:</b> ${formatStrategicGoals(i)}</p>
+      <p><b>الملخص:</b> ${i.summary || ''}</p>
+      <p><b>القيمة المقترحة:</b> ${i.value || ''}</p><p><b>مصفاة الفرز الأولي:</b> ${i.screening ? `${(+i.screening.impact||0)+(+i.screening.ease||0)+(+i.screening.alignment||0)}/100 — أثر ${i.screening.impact||0}، سهولة ${i.screening.ease||0}، مواءمة ${i.screening.alignment||0}` : 'لم تُستكمل'}</p>
+      <div class="actions-sm"><button class="btn soft" onclick="openForm('idea','${i.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('ideas','${i.id}')">حذف</button></div>
+    </div>`).join('');
+}
+
+function renderEvaluations(){
+  const rows=data.evaluations.filter(e=>e.model!=='مصفاة 100');
+  document.getElementById('evaluationList').innerHTML = rows.map(e=>`
+    <div class="record-card"><div class="record-meta"><span class="badge ${badgeClass(evaluationRecommendation(e))}">${evaluationRecommendation(e)}</span><span class="badge blue">التقييم المنهجي</span><span class="tag">${e.id}</span></div><h4>${e.targetType} — ${targetName(e.targetType,e.targetId)}</h4><p><b>التفصيل:</b> احتياج ${e.need} / تنفيذ ${e.feasibility} / استدامة ${e.sustainability} / قيمة ${e.value}</p><p><b>المجموع:</b> ${evaluationTotal(e)}/12</p><p><b>مبررات الدرجات:</b> ${[e.needReason,e.feasibilityReason,e.sustainabilityReason,e.valueReason].filter(Boolean).join(' | ')||'لم تسجل'}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('evaluation','${e.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('evaluations','${e.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد تقييمات منهجية.</div>';
+}
+
+
+function generateDiscoveryAnalysis(){
+  const rows=data.tools.filter(t=>t.stage==='الاستكشاف');
+  const box=document.getElementById('discoveryAIResult');
+  if(!rows.length){ box.innerHTML='لا توجد أدوات استكشاف محفوظة للتحليل.'; return; }
+  const values=rows.flatMap(r=>Object.entries(r.values||{}).map(([k,v])=>({tool:r.tool,key:k,value:String(v||'').trim()}))).filter(x=>x.value);
+  const corpus=values.map(x=>x.value).join(' ');
+  const evidenceCount=values.filter(x=>/دليل|بيان|تقرير|استبيان|مقابلة|ملاحظة|قياس/.test(x.key+' '+x.value)).length;
+  const beneficiaryCount=values.filter(x=>/مستفيد|فئة|أصحاب المصلحة|متأثر/.test(x.key+' '+x.value)).length;
+  const causeCount=values.filter(x=>/سبب|جذر|لماذا|أسباب/.test(x.key+' '+x.value)).length;
+  const gaps=[];
+  if(evidenceCount<2) gaps.push('الحاجة إلى أدلة إضافية أو تنويع مصادر التحقق');
+  if(beneficiaryCount<1) gaps.push('تحديد الفئة المستفيدة وأصحاب المصلحة بصورة أدق');
+  if(causeCount<1) gaps.push('تعميق تحليل الأسباب الجذرية');
+  const readiness=Math.min(100,35+rows.length*10+Math.min(values.length,15)*2+(evidenceCount>=2?10:0));
+  box.innerHTML=`<div class="grid3"><div class="record-card"><h4>الخلاصة التجميعية</h4><p>تم تحليل ${rows.length} أداة و${values.length} مدخلًا. أبرز المحتوى المتاح: ${corpus.slice(0,280)}${corpus.length>280?'…':''}</p></div><div class="record-card"><h4>الفجوات والأسئلة</h4><p>${gaps.length?gaps.join('؛ '):'المدخلات متوازنة مبدئيًا، ويُنصح بمراجعة الأدلة مع المستفيدين.'}</p></div><div class="record-card"><h4>جاهزية الاستكشاف</h4><div class="n" style="font-size:28px;font-weight:900">${readiness}%</div><p>${readiness>=75?'جاهزية جيدة للعرض على البوابة مع مراجعة بشرية.':readiness>=55?'جاهزية متوسطة وتحتاج استكمال بعض الفجوات.':'الاستكشاف يحتاج مدخلات وأدلة إضافية.'}</p></div></div><br><b>توصية ذكية:</b> ${gaps.length?'استكمال: '+gaps.join('، ')+'.':'تجهيز ملخص الأدلة وعرضه على بوابة الاستكشاف والقبول.'}<div class="note-sm" style="margin-top:8px">هذا تحليل محلي مساعد مبني على المدخلات المحفوظة، ولا يستبدل حكم الفريق أو اعتماد البوابة.</div>`;
+}
+
+function toolCardHtml(t, stage){
+  const info=toolInfo[t] || {def:'—',how:'—',result:'—'};
+  return `<div class="tool"><b>${t}</b><small>${info.def}</small><p><b>طريقة الاستخدام:</b> ${info.how}</p><p><b>النتيجة:</b> ${info.result}</p><div class="actions-sm"><button class="btn outline" onclick="toolInfoModal('${t}')">تعريف بالأداة</button><button class="btn primary" onclick="openToolForm('${t}','${stage}')">فتح الأداة</button></div></div>`;
+}
+function renderToolGrids(){
+  document.getElementById('toolGridExploration').innerHTML = ['التمهيد التحليلي','برادشو','خريطة أصحاب المصلحة','رحلة المستفيد','سجل الأدلة','شجرة المشكلة الأولية'].map(t=>toolCardHtml(t,'الاستكشاف')).join('');
+  document.getElementById('toolGridDefinitionProblem').innerHTML = ['SPICE','شجرة المشكلة النهائية','السبب الجذري'].map(t=>toolCardHtml(t,'التحديد')).join('');
+  document.getElementById('toolGridDefinition').innerHTML = ['تحليل AAA','SPICE','شجرة المشكلة النهائية','السبب الجذري','خمس مرات لماذا','مصفوفة الأولوية'].map(t=>toolCardHtml(t,'التحديد')).join('');
+  document.getElementById('toolGridDevelopment').innerHTML = ['شجرة الأهداف','تحليل الفجوة','كيف يمكننا أن؟','SCAMPER','خريطة القيمة','مصفوفة الأثر والتنفيذ','مصفوفة القرار الموزونة','بطاقة التجربة'].map(t=>toolCardHtml(t,'التطوير')).join('');
+}
+function renderToolsByStage(){
+  document.getElementById('toolListExploration').innerHTML = toolCardsByStage('الاستكشاف');
+  document.getElementById('toolListDefinition').innerHTML = toolCardsByStage('التحديد');
+  document.getElementById('toolListDevelopment').innerHTML = toolCardsByStage('التطوير');
+}
+function toolCardsByStage(stage){
+  const rows=data.tools.filter(t=>t.stage===stage);
+  return rows.map(t=>`<div class="record-card"><div class="record-meta"><span class="badge blue">${t.tool}</span><span class="tag">${t.id}</span></div><h4>${t.title || '—'}</h4><p>${Object.keys(t.values||{}).slice(0,3).map(k=>`${k}: ${String(t.values[k]).slice(0,45)}`).join(' | ')}</p>${t.aiAnalysis?`<div class="notice"><b>التحليل الذكي:</b> ${t.aiAnalysis.summary}<br><b>الفجوات:</b> ${t.aiAnalysis.gaps}<br><b>التوصية:</b> ${t.aiAnalysis.recommendation}</div>`:''}<div class="actions-sm"><button class="btn outline" onclick="toolInfoModal('${t.tool}')">تعريف</button><button class="btn gold-btn" onclick="generateToolAnalysis('${t.id}')">تحليل ذكي</button><button class="btn soft" onclick="openToolForm('${t.tool}','${stage}','${t.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('tools','${t.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد أدوات محفوظة لهذه المرحلة.</div>';
+}
+
+function renderScope(){
+  document.getElementById('scopeList').innerHTML = data.scope.map(s=>`<div class="record-card"><div class="record-meta"><span class="badge blue">${findTitle('projects',s.projectId)}</span><span class="tag">${s.id}</span></div><p><b>داخل النطاق:</b> ${s.inScope}</p><p><b>خارج النطاق:</b> ${s.outScope}</p><p><b>القيود:</b> ${s.constraints}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('scope','${s.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('scope','${s.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد نطاقات تدخل.</div>';
+}
+function renderSolutions(){
+  document.getElementById('solutionBody').innerHTML = data.solutions.map(s=>`<tr><td>${findTitle('projects',s.projectId)}</td><td><b>${s.title}</b></td><td>${s.impact}</td><td>${s.ease}</td><td>${s.sustainability}</td><td>${s.risk}</td><td><span class="badge ${badgeClass(s.decision)}">${s.decision}</span></td><td><div class="actions-sm"><button class="btn soft" onclick="openForm('solution','${s.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('solutions','${s.id}')">حذف</button></div></td></tr>`).join('');
+}
+function renderPrototypes(){
+  document.getElementById('prototypeList').innerHTML = data.prototypes.map(p=>`<div class="record-card"><div class="record-meta"><span class="badge blue">${findTitle('projects',p.projectId)}</span><span class="tag">${p.id}</span></div><p><b>فرضية التجربة:</b> ${p.hypothesis}</p><p><b>النموذج الأولي:</b> ${p.prototype}</p><p><b>خطة الاختبار:</b> ${p.testPlan}</p><p><b>المؤشرات:</b> ${p.metrics}</p><p><b>الميزانية:</b> ${p.budget}</p><p><b>المخاطر:</b> ${p.risks}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('prototype','${p.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('prototypes','${p.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد نماذج أولية.</div>';
+}
+function renderExperiments(){
+  document.getElementById('experimentBody').innerHTML = data.experiments.map(e=>`<tr><td>${findTitle('projects',e.projectId)}</td><td>${e.hypothesis}</td><td>${e.baseline}</td><td>${e.target}</td><td>${e.result}</td><td><span class="badge ${badgeClass(e.status)}">${e.status}</span></td><td><div class="actions-sm"><button class="btn soft" onclick="openForm('experiment','${e.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('experiments','${e.id}')">حذف</button></div></td></tr>`).join('');
+}
+function renderFollowups(){
+  document.getElementById('followupList').innerHTML = data.followups.map(f=>`<div class="record-card"><div class="record-meta"><span class="badge green">قياس أثر</span><span class="badge blue">${findTitle('projects',f.projectId)}</span><span class="tag">${f.id}</span></div><p><b>خط الأساس:</b> ${f.baseline}</p><p><b>المؤشرات:</b> ${f.indicators}</p><p><b>مصدر البيانات:</b> ${f.dataSource}</p><p><b>التواتر:</b> ${f.periodicity}</p><p><b>النتائج الكمية:</b> ${f.quantitative}</p><p><b>النتائج النوعية:</b> ${f.qualitative}</p><p><b>التوصية:</b> ${f.recommendation}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('followup','${f.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('followups','${f.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد سجلات متابعة وقياس أثر.</div>';
+}
+function renderImpact(){
+  const expCount=data.experiments.length;
+  const successCount=data.experiments.filter(e=> numeric(e.target) && numeric(e.result)<=numeric(e.target)).length;
+  document.getElementById('impactKpis').innerHTML = `
+    <div class="kpi c1"><small>التجارب</small><div class="n">${expCount}</div></div>
+    <div class="kpi c2"><small>الناجح منها</small><div class="n">${successCount}</div></div>
+    <div class="kpi c3"><small>المتابعات المسجلة</small><div class="n">${data.followups.length}</div></div>
+    <div class="kpi c4"><small>مواد المعرفة الناتجة</small><div class="n">${data.knowledge.length}</div></div>`;
+}
+function renderApprovals(){
+  const el=document.getElementById('approvalList'); if(!el) return;
+  el.innerHTML = data.approvals.map(a=>`<div class="approval-card"><div class="record-meta"><span class="badge ${badgeClass(a.status)}">${a.action}</span><span class="badge ${badgeClass(a.status)}">${a.status}</span><span class="tag">${a.id}</span></div><h4>${findTitle('projects',a.projectId)}</h4><p><b>المسؤول:</b> ${a.owner}</p><p><b>التاريخ:</b> ${a.date || '—'}</p><p><b>نطاق التطبيق:</b> ${a.departments || '—'}</p><p><b>خطة التنفيذ:</b> ${a.plan || '—'}</p><p><b>المتطلبات:</b> ${a.requirements || '—'}</p><p><b>الملاحظات:</b> ${a.notes || '—'}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('approval','${a.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('approvals','${a.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد إجراءات اعتماد أو تعميم.</div>';
+}
+
+function renderKnowledge(){
+  const q=(document.getElementById('knowledgeSearch')?.value||'').toLowerCase();
+  document.getElementById('knowledgeList').innerHTML = data.knowledge.filter(k=>!q || (`${k.title} ${k.lesson} ${k.details} ${k.keywords}`).toLowerCase().includes(q)).map(k=>`<div class="record-card"><div class="record-meta"><span class="badge ${badgeClass(k.status)}">${k.type}</span><span class="badge ${badgeClass(k.status)}">${k.status}</span><span class="tag">${k.id}</span></div><h4>${k.title}</h4><p><b>مرتبط بـ:</b> ${findTitle('projects',k.linked)||findTitle('challenges',k.linked)||k.linked}</p><p><b>الدرس المستفاد:</b> ${k.lesson}</p><p><b>التفاصيل:</b> ${k.details}</p><p><b>الكلمات المفتاحية:</b> ${k.keywords}</p><div class="actions-sm"><button class="btn soft" onclick="openForm('knowledge','${k.id}')">تعديل</button><button class="btn danger" onclick="deleteItem('knowledge','${k.id}')">حذف</button></div></div>`).join('') || '<div class="empty">لا توجد مواد في بنك المعرفة.</div>';
+}
+function calculateRewards(){
+  const map={};
+  function add(name, points, source){ if(!map[name]) map[name]={name,points:0,source:[],badges:[]}; map[name].points += points; map[name].source.push(source); }
+  data.challenges.forEach(c=> add(c.owner || 'غير محدد', 10, 'تحديات'));
+  data.ideas.forEach(i=> add(i.submitter || 'غير محدد', i.status.includes('مقبولة') ? 30 : 10, 'أفكار'));
+  data.experiments.forEach(e=> add(findTitle('projects',e.projectId), 40, 'تجارب'));
+  data.knowledge.forEach(k=> add(findTitle('projects',k.linked)||findTitle('challenges',k.linked)||'غير محدد', 10, 'معرفة'));
+  return Object.values(map).map(x=>{ x.badges=awardsCatalog.filter(a=>x.points>=a.threshold).map(a=>a.name); x.source=[...new Set(x.source)].join(' + '); return x; }).sort((a,b)=>b.points-a.points);
+}
+function renderRewards(){
+  const rewards=calculateRewards();
+  document.getElementById('rewardsBody').innerHTML = rewards.map(r=>`<tr><td>${r.name}</td><td><b>${r.points}</b></td><td>${r.source}</td><td>${r.badges.join('، ') || '—'}</td></tr>`).join('');
+  document.getElementById('badgeGrid').innerHTML = awardsCatalog.map(a=>{ const active=rewards.some(r=>r.points>=a.threshold); return `<div class="award ${active?'active':''}"><div class="icon">${a.icon}</div><b>${a.name}</b><div class="note-sm">${a.desc}</div><span class="badge ${active?'gold':'gray'}">${a.threshold} نقطة</span></div>`; }).join('');
+}
+
+function renderGateWorkspace(pageId, gateName, phaseTitle, question, authority){
+  const records = data.gates.filter(g=>g.gate===gateName);
+  const stageMap = {'الاستكشاف':'الاستكشاف','التحديد':'التحديد','التطوير':'التطوير','التسليم':'التسليم'};
+  const candidates = data.projects.filter(p=>p.stage===stageMap[phaseTitle]);
+  const gateRecord = records[0] || {gate:gateName, itemType:'مشروع', itemId:candidates[0]?.id||'', need:1, feasibility:1, sustainability:1, value:1, decision:'', notes:'', outputs:{a:false,b:false,c:false,d:false}};
+  const total = gateTotal(gateRecord);
+  const targetLabel = gateRecord.itemId ? `${gateRecord.itemType || 'مشروع'} — ${targetName(gateRecord.itemType || 'مشروع', gateRecord.itemId)}` : 'لم يُحدد مستهدف';
+
+  document.getElementById(pageId+'_side').innerHTML = `
+    <h4>${gateName}</h4>
+    <div class="note-sm">${question}</div><br>
+    <div class="field"><label>المستهدف الحالي</label><div><b>${targetLabel}</b></div></div>
+    <div class="field"><label>قرار البوابة</label><div class="badge ${badgeClass(recommendFromGate(total,gateRecord))}">${gateRecord.decision || 'لم يُتخذ بعد'}</div></div>
+    <div class="field"><label>صاحب الصلاحية</label><div>${gateRecord.authority || authority}</div></div>
+    <div class="field"><label>صاحب القرار</label><div>${gateRecord.decisionMaker || '—'}</div></div>
+    <div class="field"><label>تاريخ القرار</label><div>${gateRecord.date || '—'}</div></div>
+    <div class="field"><label>النتيجة</label><div class="badge gold">${total}/12 — ${recommendFromGate(total,gateRecord)}</div></div>
+    <div class="field"><button class="btn primary" onclick="openForm('gate','${gateRecord.id || gateName}')">تحرير قرار البوابة</button></div>`;
+
+  const outputs = gateRecord.outputs || {};
+  const completedTools = data.tools.filter(t=>t.stage===phaseTitle);
+  const candidateRows = candidates.map(p=>{
+    const r=records.find(g=>g.itemId===p.id);
+    const status = !r ? 'تحتاج اعتماد' : gateTotal(r)>=10 ? 'معتمدة' : gateTotal(r)>=7 ? 'تحتاج تطوير' : 'إعادة تطوير';
+    return `<div class="target-row ${p.id===gateRecord.itemId?'current':''}"><b>${p.title}</b><span>${p.owner}</span><span>${r ? `${gateTotal(r)}/12` : 'لم تُقيّم'}</span><span class="badge ${badgeClass(status)}">${status}</span></div>`;
+  }).join('') || '<div class="empty">لا توجد مستهدفات مرتبطة بهذه المرحلة.</div>';
+
+  const toolsHtml = completedTools.length ? completedTools.map(t=>`<div class="acc-item"><div class="acc-head" onclick="this.parentElement.classList.toggle('open')"><div><b>${t.tool}</b><div class="note-sm">${t.title || 'سجل منفذ'}</div></div><span>◂</span></div><div class="acc-body"><div class="inline-tool-values">${Object.entries(t.values||{}).map(([k,v])=>`<div class="inline-tool-value"><b>${k}</b><span>${v || '—'}</span></div>`).join('')}</div></div></div>`).join('') : '<div class="notice">لم تُنجز أدوات تحليل محفوظة لهذه المرحلة بعد.</div>';
+
+  document.getElementById(pageId+'_main').innerHTML = `
+    <div class="section"><h4>المستهدفات المعروضة على البوابة</h4><div class="target-list">${candidateRows}</div></div>
+    <div class="section"><h4>المخرجات الإلزامية للمستهدف الحالي</h4><div class="checklist">
+      <div class="check-item"><span>نتائج أو مخرجات موثقة</span><span>${outputs.a ? '✓' : '—'}</span></div>
+      <div class="check-item"><span>مقارنة بخط الأساس أو التعريف المعتمد</span><span>${outputs.b ? '✓' : '—'}</span></div>
+      <div class="check-item"><span>نموذج تشغيل / استدامة أو جاهزية تطبيق</span><span>${outputs.c ? '✓' : '—'}</span></div>
+      <div class="check-item"><span>توصية أو مبرر قرار نهائي</span><span>${outputs.d ? '✓' : '—'}</span></div>
+    </div></div>
+    <div class="section"><h4>الأدلة والمشاركة والمخاطر</h4><div class="form-grid">
+      <div class="field"><label>الأدلة والبيانات</label><textarea readonly>${gateRecord.evidence || ''}</textarea></div>
+      <div class="field"><label>من شارك وكيف شارك؟</label><textarea readonly>${gateRecord.stakeholders || ''}</textarea></div>
+      <div class="field"><label>ما الذي غيّر نتيجة المشاركة؟</label><textarea readonly>${gateRecord.changeReason || ''}</textarea></div>
+      <div class="field"><label>المخاطر والافتراضات</label><textarea readonly>${gateRecord.risks || ''}</textarea></div>
+    </div></div>
+    <div class="section"><h4>أدوات التحليل المنجزة في المرحلة</h4><div class="accordion">${toolsHtml}</div></div>
+    <div class="section"><h4>معايير التقييم الحاكمة</h4><div class="criteria-grid">
+      <div class="criterion ${+gateRecord.need===1?'locked':''}"><h5>الاستجابة للاحتياج</h5><select disabled><option>${gateRecord.need || 1} — ${labelStrength(gateRecord.need)}</option></select><div class="criterion-desc">${criterionText('need',gateRecord.need)}</div></div>
+      <div class="criterion"><h5>القابلية للتنفيذ</h5><select disabled><option>${gateRecord.feasibility || 1} — ${labelStrength(gateRecord.feasibility)}</option></select><div class="criterion-desc">${criterionText('feasibility',gateRecord.feasibility)}</div></div>
+      <div class="criterion"><h5>الجدوى والاستدامة</h5><select disabled><option>${gateRecord.sustainability || 1} — ${labelStrength(gateRecord.sustainability)}</option></select><div class="criterion-desc">${criterionText('sustainability',gateRecord.sustainability)}</div></div>
+      <div class="criterion ${+gateRecord.value===1?'locked':''}"><h5>القيمة والأثر الاجتماعي</h5><select disabled><option>${gateRecord.value || 1} — ${labelStrength(gateRecord.value)}</option></select><div class="criterion-desc">${criterionText('value',gateRecord.value)}</div></div>
+    </div><br><div class="notice"><b>المستهدف:</b> ${targetLabel}. <b>النتيجة:</b> ${total}/12 — ${recommendFromGate(total,gateRecord)}. <b>القرار:</b> ${gateRecord.decision || 'لم يُتخذ بعد'}.</div></div><div class="approval-final"><h4>اعتماد قرار البوابة</h4><div class="approval-grid"><div><b>النتيجة الآلية</b><div>${total}/12 — ${recommendFromGate(total,gateRecord)}</div></div><div><b>المعتمد</b><div>${gateRecord.decisionMaker||'لم يحدد'}</div></div><div><b>التاريخ</b><div>${gateRecord.date||'لم يحدد'}</div></div></div><br><div><b>مبررات القرار والإجراء التالي:</b><p>${gateRecord.notes||'لم تسجل المبررات بعد'}</p></div><button class="btn primary" onclick="openForm('gate','${gateRecord.id || gateName}')">تحرير واعتماد القرار</button></div>`;
+}
+
+function criterionText(type,v){ const m={need:['افتراض أو انطباع بلا دليل','أدلة أولية أو محدودة','احتياج مثبت بأكثر من دليل وبمشاركة المستفيدين'],feasibility:['فجوات كبيرة في الموارد أو الصلاحيات','قابل للتنفيذ بعد متطلبات إضافية محددة','قابل للتنفيذ بموارد وصلاحيات ومالك واضح'],sustainability:['يعتمد على موارد مؤقتة ولا يملك نموذج تشغيل','نموذج أولي مع افتراضات غير محسومة','تكلفة وتمويل وتشغيل واستدامة واضحة'],value:['القيمة غير واضحة ولا يوجد مؤشر','قيمة متوقعة ومؤشر أو خط أساس غير مكتمل','قيمة قابلة للقياس مرتبطة بنتيجة للمستفيد ومؤشر استراتيجي']}; return m[type][Math.max(1,+v||1)-1]; }
+
+function labelStrength(v){ return v==3 ? 'قوي' : v==2 ? 'متوسط' : 'ضعيف'; }
+
+function openPage(id,btn=null){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page=document.getElementById(id); if(page) page.classList.add('active');
+  document.querySelectorAll('.nav-btn,.sub-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');
+  let t=titles[id]; if(!t){ const found=phases.flatMap(p=>p.subs.map(s=>[p.key+'_'+s[0], p.title+' — '+s[1], p.desc])).find(x=>x[0]===id); t=found ? [found[1], found[2]] : [id,'']; }
+  document.getElementById('title').textContent=t[0]; document.getElementById('desc').textContent=t[1]; window.scrollTo({top:0,behavior:'smooth'});
+}
+function openProject(projectId){ const p=data.projects.find(x=>x.id===projectId); const individual=['مالك واحد للمشروع','نماذج مبسطة','عيادات متابعة دورية','اعتماد ضمن الصلاحيات']; const group=['قائد فريق وميسر','فريق متعدد التخصصات','ورش ومشاركة مستفيدين','عرض المخرجات على البوابات']; const items=p.path==='فردي'?individual:group; modalTitle.textContent=p.title; modalBody.innerHTML=`<div class="grid3"><div class="record-card"><h4>المرحلة</h4><p>${p.stage}</p></div><div class="record-card"><h4>المسار</h4><p>${p.path}</p></div><div class="record-card"><h4>التقدم</h4><p>${p.progress}%</p></div></div><br><div class="record-card"><h4>متطلبات المسار ${p.path}</h4><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul></div>`; modal.classList.add('show'); }
+function smartAdd(){ const active=document.querySelector('.page.active')?.id||'dashboard'; const map={cycles:'cycle',delivery_logical:'logical',observatory:'opportunity',exploration_challenges:'challenge',exploration_ideas:'idea',exploration_screening:'evaluation',definition_scope:'scope',development_solutions:'solution',development_prototype:'prototype',delivery_experiments:'experiment',delivery_followup:'followup',delivery_approval:'approval',knowledge:'knowledge'}; openForm(map[active]||'challenge'); }
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+
+function openForm(type,id=''){
+  document.getElementById('modal').classList.add('show');
+  ({cycle:formCycle,logical:formLogical,opportunity:formOpportunity,challenge:formChallenge,idea:formIdea,evaluation:formEvaluation,scope:formScope,solution:formSolution,prototype:formPrototype,experiment:formExperiment,followup:formFollowup,knowledge:formKnowledge,approval:formApproval,gate:formGate}[type])(id);
+}
+
+
+function formCycle(id){
+  const item=data.cycles.find(x=>x.id===id)||{projects:[],currentStep:1,status:'إعداد'}; modalTitle.textContent=id?'تعديل دورة معمل جَذوة':'إضافة دورة معمل جَذوة';
+  modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>اسم الدورة</label><input id="f_title" value="${item.title||''}"></div><div class="field"><label>الحالة</label><select id="f_status">${['إعداد','استقبال','فرز','تنفيذ','تجارب','عرض نهائي','مغلقة'].map(v=>`<option ${item.status===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><label>النطاق أو الموضوع</label><textarea id="f_scope">${item.scope||''}</textarea></div><div class="field"><label>البداية</label><input id="f_start" type="date" value="${item.start||''}"></div><div class="field"><label>النهاية</label><input id="f_end" type="date" value="${item.end||''}"></div><div class="field"><label>مدير الدورة</label><input id="f_manager" value="${item.manager||''}"></div><div class="field"><label>الميسرون</label><input id="f_facilitators" value="${item.facilitators||''}"></div><div class="field"><label>الميزانية</label><input id="f_budget" value="${item.budget||''}"></div><div class="field"><label>الخطوة الحالية (1-9)</label><input id="f_currentStep" type="number" min="1" max="9" value="${item.currentStep||1}"></div><div class="field full"><label>المشروعات المرتبطة</label><select id="f_projects" class="multi-select" multiple>${data.projects.map(p=>`<option value="${p.id}" ${(item.projects||[]).includes(p.id)?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field full"><button class="btn primary" onclick="saveCycle('${id||''}')">حفظ</button></div></div>`;
+}
+function saveCycle(id){ const obj={id:id||('CY-'+String(data.cycles.length+1).padStart(3,'0')),title:f_title.value,status:f_status.value,scope:f_scope.value,start:f_start.value,end:f_end.value,manager:f_manager.value,facilitators:f_facilitators.value,budget:f_budget.value,currentStep:+f_currentStep.value||1,projects:[...f_projects.selectedOptions].map(o=>o.value)}; if(id) Object.assign(data.cycles.find(x=>x.id===id),obj); else data.cycles.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' دورة معمل: '+obj.title); saveData(); closeModal(); }
+function formLogical(id){
+  const item=data.logicalFrames.find(x=>x.id===id)||{projectId:data.projects[0]?.id||'',rows:[{level:'الأثر',statement:'',indicator:'',baseline:'',target:'',verification:'',assumptions:'',owner:''},{level:'النتيجة',statement:'',indicator:'',baseline:'',target:'',verification:'',assumptions:'',owner:''},{level:'المخرج',statement:'',indicator:'',baseline:'',target:'',verification:'',assumptions:'',owner:''},{level:'النشاط',statement:'',indicator:'',baseline:'',target:'',verification:'',assumptions:'',owner:''}]};
+  window._logicRows=JSON.parse(JSON.stringify(item.rows||[])); modalTitle.textContent=id?'تعديل مصفوفة الإطار المنطقي':'إضافة مصفوفة الإطار المنطقي';
+  modalBody.innerHTML=`<div class="notice">يجب أن يرتبط كل نشاط بمخرج، وكل مخرج بنتيجة، وكل نتيجة بالأثر. تُنقل المؤشرات لاحقًا إلى صفحة المتابعة وقياس الأثر.</div><br><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><br><div id="logicEditor"></div><br><div class="actions-sm"><button class="btn soft" onclick="addLogicRow()">+ إضافة صف</button><button class="btn primary" onclick="saveLogical('${id||''}')">حفظ المصفوفة</button></div>`; renderLogicEditor();
+}
+function renderLogicEditor(){ document.getElementById('logicEditor').innerHTML=`<div class="table-wrap"><table class="logic-table"><thead><tr><th>المستوى</th><th>الصياغة</th><th>المؤشر</th><th>خط الأساس</th><th>المستهدف</th><th>وسيلة التحقق</th><th>الافتراضات</th><th>المسؤول</th><th></th></tr></thead><tbody>${window._logicRows.map((r,i)=>`<tr><td><select onchange="_logicRows[${i}].level=this.value">${['الأثر','النتيجة','المخرج','النشاط'].map(v=>`<option ${r.level===v?'selected':''}>${v}</option>`).join('')}</select></td>${['statement','indicator','baseline','target','verification','assumptions','owner'].map(k=>`<td><input value="${String(r[k]||'').replace(/"/g,'&quot;')}" oninput="_logicRows[${i}].${k}=this.value"></td>`).join('')}<td><button class="btn danger" onclick="_logicRows.splice(${i},1);renderLogicEditor()">حذف</button></td></tr>`).join('')}</tbody></table></div>`; }
+function addLogicRow(){ window._logicRows.push({level:'النشاط',statement:'',indicator:'',baseline:'',target:'',verification:'',assumptions:'',owner:''}); renderLogicEditor(); }
+function saveLogical(id){ const obj={id:id||('LF-'+String(data.logicalFrames.length+1).padStart(3,'0')),projectId:f_projectId.value,rows:window._logicRows}; if(id) Object.assign(data.logicalFrames.find(x=>x.id===id),obj); else data.logicalFrames.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' مصفوفة إطار منطقي'); saveData(); closeModal(); }
+
+function formOpportunity(id){ const item=data.opportunities.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل فرصة / احتياج':'إضافة فرصة / احتياج'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>العنوان</label><input id="f_title" value="${item.title||''}"></div><div class="field"><label>النوع</label><select id="f_type">${['فرصة','احتياج'].map(v=>`<option ${item.type===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المصدر</label><input id="f_source" value="${item.source||''}"></div><div class="field"><label>البعد</label><select id="f_dimension">${['المستفيدون','أصحاب المصلحة','العمليات الداخلية','التعلم والنمو','البعد المالي'].map(v=>`<option ${item.dimension===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>الاستعجال</label><select id="f_urgency">${['عالية','متوسطة','منخفضة'].map(v=>`<option ${item.urgency===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المالك</label><input id="f_owner" value="${item.owner||''}"></div><div class="field full"><label>الملخص</label><textarea id="f_summary">${item.summary||''}</textarea></div><div class="field full"><button class="btn primary" onclick="saveOpportunity('${id||''}')">حفظ</button></div></div>`; }
+function saveOpportunity(id){ const obj={id:id||('OP-'+String(data.opportunities.length+1).padStart(3,'0')), title:f_title.value, type:f_type.value, source:f_source.value, dimension:f_dimension.value, urgency:f_urgency.value, owner:f_owner.value, summary:f_summary.value}; if(id) Object.assign(data.opportunities.find(x=>x.id===id),obj); else data.opportunities.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' فرصة/احتياج: '+obj.title); saveData(); closeModal(); }
+function convertOpportunityToChallenge(id){ const o=data.opportunities.find(x=>x.id===id); if(!o) return; const ch={id:'CH-'+String(data.challenges.length+1).padStart(3,'0'), title:o.title, dimension:o.dimension, priority:o.urgency, owner:o.owner, evidence:o.summary, source:o.source, beneficiary:'', summary:o.summary, currentState:'', desiredState:'', urgency:o.urgency, status:'نشط'}; data.challenges.push(ch); data.activities.unshift('تحويل فرصة/احتياج إلى تحدٍ: '+o.title); saveData(); openPage('exploration_challenges'); }
+
+
+function formatStrategicGoals(item){
+  const ids=Array.isArray(item.goals)&&item.goals.length?item.goals:(item.goal?[item.goal]:[]);
+  return ids.length?ids.map(g=>findTitle('strategicGoals',g)).join('، '):'غير مرتبط';
+}
+function goalSelectOptions(selected=''){
+  return `<option value="">غير مرتبط</option>${data.strategicGoals.map(g=>`<option value="${g.id}" ${selected===g.id?'selected':''}>${g.id} — ${g.title}</option>`).join('')}`;
+}
+function renderGoalSelectors(containerId, selectedGoals=[]){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  const values=(selectedGoals||[]).filter(Boolean);
+  box.innerHTML='';
+  (values.length?values:['']).forEach(v=>addGoalSelector(containerId,v));
+}
+function addGoalSelector(containerId,selected=''){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  const row=document.createElement('div');
+  row.className='actions-sm goal-selector-row';
+  row.style.marginBottom='8px';
+  row.innerHTML=`<select class="strategic-goal-select" style="flex:1;min-width:260px">${goalSelectOptions(selected)}</select><button type="button" class="btn danger" onclick="this.parentElement.remove();ensureOneGoalSelector('${containerId}')">حذف</button>`;
+  box.appendChild(row);
+}
+function ensureOneGoalSelector(containerId){
+  const box=document.getElementById(containerId);
+  if(box && !box.querySelector('.strategic-goal-select')) addGoalSelector(containerId,'');
+}
+function collectGoalSelectors(containerId){
+  const vals=[...document.querySelectorAll(`#${containerId} .strategic-goal-select`)].map(x=>x.value).filter(Boolean);
+  return [...new Set(vals)];
+}
+
+function formChallenge(id){
+  const item=data.challenges.find(x=>x.id===id)||{};
+  const selectedGoals=Array.isArray(item.goals)?item.goals:(item.goal?[item.goal]:[]);
+  modalTitle.textContent=id?'تعديل التحدي':'إضافة تحدٍ';
+  modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>عنوان التحدي</label><input id="f_title" value="${item.title||''}"></div><div class="field"><label>البعد</label><select id="f_dimension">${['المستفيدون','أصحاب المصلحة','العمليات الداخلية','التعلم والنمو','البعد المالي'].map(v=>`<option ${item.dimension===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>الأولوية</label><select id="f_priority">${['عالية','متوسطة','منخفضة'].map(v=>`<option ${item.priority===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المالك</label><input id="f_owner" value="${item.owner||''}"></div><div class="field"><label>المصدر</label><input id="f_source" value="${item.source||''}"></div><div class="field"><label>الفئة المستفيدة</label><input id="f_beneficiary" value="${item.beneficiary||''}"></div><div class="field full"><div class="card-head"><label>الأهداف الاستراتيجية المرتبطة (اختيارية)</label><button type="button" class="btn soft" onclick="addGoalSelector('challengeGoalSelectors')">+ إضافة هدف آخر</button></div><div id="challengeGoalSelectors"></div><div class="note-sm">يمكن اختيار هدف واحد أو أكثر، مع منع تكرار الهدف نفسه عند الحفظ.</div></div><div class="field full"><label>ملخص التحدي</label><textarea id="f_summary">${item.summary||''}</textarea></div><div class="field full"><label>الوضع الحالي</label><textarea id="f_currentState">${item.currentState||''}</textarea></div><div class="field full"><label>الوضع المأمول</label><textarea id="f_desiredState">${item.desiredState||''}</textarea></div><div class="field full"><label>الدليل</label><textarea id="f_evidence">${item.evidence||''}</textarea></div><div class="field full"><button class="btn primary" onclick="saveChallenge('${id||''}')">حفظ</button></div></div>`;
+  renderGoalSelectors('challengeGoalSelectors',selectedGoals);
+}
+function saveChallenge(id){
+  const goals=collectGoalSelectors('challengeGoalSelectors');
+  const obj={id:id||('CH-'+String(data.challenges.length+1).padStart(3,'0')), title:f_title.value, dimension:f_dimension.value, priority:f_priority.value, owner:f_owner.value, source:f_source.value, beneficiary:f_beneficiary.value, summary:f_summary.value, currentState:f_currentState.value, desiredState:f_desiredState.value, evidence:f_evidence.value, goals, goal:goals[0]||'', urgency:f_priority.value, status:'نشط'};
+  if(id) Object.assign(data.challenges.find(x=>x.id===id),obj); else data.challenges.push(obj);
+  data.activities.unshift((id?'تعديل':'إضافة')+' التحدي: '+obj.title); saveData(); closeModal();
+}
+
+function formIdea(id){
+  const item=data.ideas.find(x=>x.id===id)||{};
+  const sc=item.screening||{impact:0,ease:0,alignment:0};
+  const selectedGoals=Array.isArray(item.goals)?item.goals:(item.goal?[item.goal]:[]);
+  modalTitle.textContent=id?'تعديل الفكرة':'إضافة فكرة';
+  modalBody.innerHTML=`<div class="notice"><b>مصفاة الفرز الأولي داخل بوابة الأفكار:</b> الأثر 40 + سهولة التجربة 30 + المواءمة الاستراتيجية 30. وهي للفرز وترتيب الأولويات، وليست تقييم البوابات المنهجي.</div><br><div class="form-grid"><div class="field"><label>اسم الفكرة</label><input id="f_title" value="${item.title||''}" oninput="dupCheck(this.value,'ideas','dupZone')"></div><div class="field"><label>التحدي المرتبط</label><select id="f_challenge">${data.challenges.map(c=>`<option value="${c.id}" ${item.challenge===c.id?'selected':''}>${c.title}</option>`).join('')}</select></div><div class="field full"><div id="dupZone"></div></div><div class="field"><label>المقدم</label><input id="f_submitter" value="${item.submitter||''}"></div><div class="field"><label>المالك</label><input id="f_owner" value="${item.owner||''}"></div><div class="field"><label>البعد</label><select id="f_dimension">${['المستفيدون','أصحاب المصلحة','العمليات الداخلية','التعلم والنمو','البعد المالي'].map(v=>`<option ${item.dimension===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><div class="card-head"><label>الأهداف الاستراتيجية المرتبطة (اختيارية)</label><button type="button" class="btn soft" onclick="addGoalSelector('ideaGoalSelectors')">+ إضافة هدف آخر</button></div><div id="ideaGoalSelectors"></div><div class="note-sm">يمكن ربط الفكرة بأكثر من هدف استراتيجي عند وجود مساهمة فعلية.</div></div><div class="field full"><label>الملخص</label><textarea id="f_summary">${item.summary||''}</textarea></div><div class="field full"><label>القيمة المقترحة</label><textarea id="f_valueText">${item.value||''}</textarea></div><div class="field"><label>الأثر (40)</label><input id="f_screenImpact" type="number" min="0" max="40" value="${sc.impact||0}" oninput="calcIdeaScreening()"></div><div class="field"><label>سهولة التجربة (30)</label><input id="f_screenEase" type="number" min="0" max="30" value="${sc.ease||0}" oninput="calcIdeaScreening()"></div><div class="field"><label>المواءمة الاستراتيجية (30)</label><input id="f_screenAlignment" type="number" min="0" max="30" value="${sc.alignment||0}" oninput="calcIdeaScreening()"></div><div class="field"><label>النتيجة والتوصية</label><input id="f_screenTotal" readonly></div><div class="field"><label>الحالة</label><select id="f_status">${['مقبولة','تحتاج تطوير','مؤجلة'].map(v=>`<option ${item.status===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><button class="btn primary" onclick="saveIdea('${id||''}')">حفظ</button></div></div>`;
+  renderGoalSelectors('ideaGoalSelectors',selectedGoals);
+  calcIdeaScreening();
+}
+function calcIdeaScreening(){
+  const total=Math.min(40,+f_screenImpact.value||0)+Math.min(30,+f_screenEase.value||0)+Math.min(30,+f_screenAlignment.value||0);
+  const rec=total>=80?'أولوية مرتفعة':total>=60?'تحتاج تطوير':'حاضنة أفكار';
+  f_screenTotal.value=`${total}/100 — ${rec}`;
+}
+function saveIdea(id){
+  const screening={impact:Math.min(40,+f_screenImpact.value||0),ease:Math.min(30,+f_screenEase.value||0),alignment:Math.min(30,+f_screenAlignment.value||0)};
+  const total=screening.impact+screening.ease+screening.alignment;
+  const goals=collectGoalSelectors('ideaGoalSelectors');
+  const obj={id:id||('ID-'+String(data.ideas.length+1).padStart(3,'0')),title:f_title.value,challenge:f_challenge.value,submitter:f_submitter.value,owner:f_owner.value,dimension:f_dimension.value,status:f_status.value,score:total,summary:f_summary.value,value:f_valueText.value,goals,goal:goals[0]||'',screening};
+  if(id) Object.assign(data.ideas.find(x=>x.id===id),obj); else data.ideas.push(obj);
+  data.activities.unshift((id?'تعديل':'إضافة')+' الفكرة: '+obj.title); saveData(); closeModal();
+}
+
+function formEvaluation(id){
+  const item=data.evaluations.find(x=>x.id===id)||{model:'معايير منهجية 12',targetType:'فكرة'};
+  modalTitle.textContent=id?'تعديل التقييم المنهجي':'إضافة التقييم المنهجي';
+  modalBody.innerHTML=`<div class="notice"><b>تقييم واحد فقط حسب المنهجية:</b> الاستجابة للاحتياج، القابلية للتنفيذ، الجدوى والاستدامة، والقيمة والأثر الاجتماعي. لا تسمح المنصة بتكرار التقييم المنهجي للمستهدف نفسه.</div><br><div class="form-grid"><div class="field"><label>نوع المستهدف</label><select id="f_targetType" onchange="refreshEvalTargets()">${['فكرة','تحدي'].map(v=>`<option ${item.targetType===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المستهدف</label><select id="f_targetId"></select></div><div class="field full"><div class="criteria-grid"><div class="criterion"><h5>الاستجابة للاحتياج</h5><select id="f_need" onchange="showEvalTotal()">${criterionOptions('need',item.need||1)}</select><textarea id="f_needReason" placeholder="سبب الدرجة والدليل الداعم">${item.needReason||''}</textarea></div><div class="criterion"><h5>القابلية للتنفيذ</h5><select id="f_feasibility" onchange="showEvalTotal()">${criterionOptions('feasibility',item.feasibility||1)}</select><textarea id="f_feasibilityReason" placeholder="سبب الدرجة والدليل الداعم">${item.feasibilityReason||''}</textarea></div><div class="criterion"><h5>الجدوى والاستدامة</h5><select id="f_sustainability" onchange="showEvalTotal()">${criterionOptions('sustainability',item.sustainability||1)}</select><textarea id="f_sustainabilityReason" placeholder="سبب الدرجة والدليل الداعم">${item.sustainabilityReason||''}</textarea></div><div class="criterion"><h5>القيمة والأثر الاجتماعي</h5><select id="f_value" onchange="showEvalTotal()">${criterionOptions('value',item.value||1)}</select><textarea id="f_valueReason" placeholder="سبب الدرجة والدليل الداعم">${item.valueReason||''}</textarea></div></div></div><div class="field full"><label>المجموع والقرار</label><input id="f_total" readonly></div><div class="field full"><button class="btn primary" onclick="saveEvaluation('${id||''}')">حفظ التقييم المنهجي</button></div></div>`;
+  refreshEvalTargets(item.targetId); showEvalTotal();
+}
+function refreshEvalTargets(selected=''){
+  const type=f_targetType.value; const list=type==='فكرة'?data.ideas:data.challenges;
+  f_targetId.innerHTML=list.map(x=>`<option value="${x.id}" ${selected===x.id?'selected':''}>${x.title}</option>`).join('');
+}
+function criterionOptions(type,selected){
+  const d={need:['افتراض أو انطباع بلا دليل','أدلة أولية أو محدودة','احتياج مثبت بأكثر من دليل وبمشاركة المستفيدين'],feasibility:['فجوات كبيرة في الموارد أو الصلاحيات','قابل للتنفيذ بعد متطلبات إضافية محددة','قابل للتنفيذ بموارد وصلاحيات ومالك واضح'],sustainability:['يعتمد على موارد مؤقتة ولا يملك نموذج تشغيل','نموذج أولي مع افتراضات غير محسومة','تكلفة وتمويل وتشغيل واستدامة واضحة'],value:['القيمة غير واضحة ولا يوجد مؤشر','قيمة متوقعة ومؤشر أو خط أساس غير مكتمل','قيمة قابلة للقياس مرتبطة بنتيجة للمستفيد ومؤشر استراتيجي']};
+  return [1,2,3].map(v=>`<option value="${v}" ${+selected===v?'selected':''}>${v} — ${d[type][v-1]}</option>`).join('');
+}
+function showEvalTotal(){
+  const total=(+f_need.value||0)+(+f_feasibility.value||0)+(+f_sustainability.value||0)+(+f_value.value||0);
+  const blocked=(+f_need.value===1||+f_value.value===1);
+  const rec=blocked?'لا يجتاز — قاعدة ضابطة':total>=10?'جاهز':total>=7?'تطوير محدود':'إعادة تطوير';
+  f_total.value=`${total}/12 — ${rec}`;
+}
+function saveEvaluation(id){
+  const duplicate=data.evaluations.find(e=>e.id!==id&&e.model!=='مصفاة 100'&&e.targetType===f_targetType.value&&e.targetId===f_targetId.value);
+  if(duplicate){ alert('يوجد تقييم منهجي محفوظ لهذا المستهدف. افتحه وعدّله بدل إنشاء تقييم آخر.'); return; }
+  const obj={id:id||('EV-'+String(data.evaluations.length+1).padStart(3,'0')),model:'معايير منهجية 12',targetType:f_targetType.value,targetId:f_targetId.value,need:+f_need.value||1,feasibility:+f_feasibility.value||1,sustainability:+f_sustainability.value||1,value:+f_value.value||1,needReason:f_needReason.value,feasibilityReason:f_feasibilityReason.value,sustainabilityReason:f_sustainabilityReason.value,valueReason:f_valueReason.value};
+  if(id) Object.assign(data.evaluations.find(x=>x.id===id),obj); else data.evaluations.push(obj);
+  data.activities.unshift((id?'تعديل':'إضافة')+' التقييم المنهجي: '+obj.id); saveData(); closeModal();
+}
+
+function formScope(id){ const item=data.scope.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل نطاق التدخل':'إضافة نطاق التدخل'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field full"><label>داخل النطاق</label><textarea id="f_inScope">${item.inScope||''}</textarea></div><div class="field full"><label>خارج النطاق</label><textarea id="f_outScope">${item.outScope||''}</textarea></div><div class="field full"><label>القيود</label><textarea id="f_constraints">${item.constraints||''}</textarea></div><div class="field full"><button class="btn primary" onclick="saveScope('${id||''}')">حفظ</button></div></div>`; }
+function saveScope(id){ const obj={id:id||('SC-'+String(data.scope.length+1).padStart(3,'0')), projectId:f_projectId.value, inScope:f_inScope.value, outScope:f_outScope.value, constraints:f_constraints.value}; if(id) Object.assign(data.scope.find(x=>x.id===id),obj); else data.scope.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' نطاق تدخل'); saveData(); closeModal(); }
+
+function formSolution(id){ const item=data.solutions.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل الحل':'إضافة حل'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field"><label>اسم الحل</label><input id="f_title" value="${item.title||''}"></div><div class="field"><label>الأثر</label><input id="f_impact" type="number" value="${item.impact||0}"></div><div class="field"><label>سهولة التنفيذ</label><input id="f_ease" type="number" value="${item.ease||0}"></div><div class="field"><label>الاستدامة</label><input id="f_sustainability" type="number" value="${item.sustainability||0}"></div><div class="field"><label>المخاطر</label><select id="f_risk">${['منخفضة','متوسطة','مرتفعة'].map(v=>`<option ${item.risk===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>القرار</label><select id="f_decision">${['مختار','بديل','مؤجل'].map(v=>`<option ${item.decision===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><button class="btn primary" onclick="saveSolution('${id||''}')">حفظ</button></div></div>`; }
+function saveSolution(id){ const obj={id:id||('SL-'+String(data.solutions.length+1).padStart(3,'0')), projectId:f_projectId.value, title:f_title.value, impact:+f_impact.value||0, ease:+f_ease.value||0, sustainability:+f_sustainability.value||0, risk:f_risk.value, decision:f_decision.value}; if(id) Object.assign(data.solutions.find(x=>x.id===id),obj); else data.solutions.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' حل: '+obj.title); saveData(); closeModal(); }
+
+function formPrototype(id){ const item=data.prototypes.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل النموذج الأولي وخطة التجربة':'إضافة النموذج الأولي وخطة التجربة'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field full"><label>فرضية التجربة</label><textarea id="f_hypothesis">${item.hypothesis||''}</textarea></div><div class="field full"><label>النموذج الأولي</label><textarea id="f_prototype">${item.prototype||''}</textarea></div><div class="field full"><label>خطة الاختبار</label><textarea id="f_testPlan">${item.testPlan||''}</textarea></div><div class="field full"><label>المؤشرات</label><textarea id="f_metrics">${item.metrics||''}</textarea></div><div class="field"><label>الميزانية</label><input id="f_budget" value="${item.budget||''}"></div><div class="field"><label>المخاطر</label><input id="f_risks" value="${item.risks||''}"></div><div class="field full"><button class="btn primary" onclick="savePrototype('${id||''}')">حفظ</button></div></div>`; }
+function savePrototype(id){ const obj={id:id||('PT-'+String(data.prototypes.length+1).padStart(3,'0')), projectId:f_projectId.value, hypothesis:f_hypothesis.value, prototype:f_prototype.value, testPlan:f_testPlan.value, metrics:f_metrics.value, budget:f_budget.value, risks:f_risks.value}; if(id) Object.assign(data.prototypes.find(x=>x.id===id),obj); else data.prototypes.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' نموذج أولي'); saveData(); closeModal(); }
+
+function formExperiment(id){ const item=data.experiments.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل التجربة':'إضافة تجربة'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field"><label>الحالة</label><select id="f_status">${['جارية','مكتملة','معلقة'].map(v=>`<option ${item.status===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><label>الفرضية</label><textarea id="f_hypothesis">${item.hypothesis||''}</textarea></div><div class="field"><label>خط الأساس</label><input id="f_baseline" value="${item.baseline||''}"></div><div class="field"><label>المستهدف</label><input id="f_target" value="${item.target||''}"></div><div class="field"><label>المتحقق</label><input id="f_result" value="${item.result||''}"></div><div class="field full"><button class="btn primary" onclick="saveExperiment('${id||''}')">حفظ</button></div></div>`; }
+function saveExperiment(id){ const obj={id:id||('EX-'+String(data.experiments.length+1).padStart(3,'0')), projectId:f_projectId.value, hypothesis:f_hypothesis.value, baseline:f_baseline.value, target:f_target.value, result:f_result.value, status:f_status.value}; if(id) Object.assign(data.experiments.find(x=>x.id===id),obj); else data.experiments.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' تجربة'); saveData(); closeModal(); }
+
+function formFollowup(id){ const item=data.followups.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل المتابعة وقياس الأثر':'إضافة متابعة وقياس أثر'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field"><label>خط الأساس</label><input id="f_baseline" value="${item.baseline||''}"></div><div class="field full"><label>المؤشرات</label><textarea id="f_indicators">${item.indicators||''}</textarea></div><div class="field"><label>مصدر البيانات</label><input id="f_dataSource" value="${item.dataSource||''}"></div><div class="field"><label>تواتر القياس</label><input id="f_periodicity" value="${item.periodicity||''}"></div><div class="field full"><label>النتائج الكمية</label><textarea id="f_quantitative">${item.quantitative||''}</textarea></div><div class="field full"><label>النتائج النوعية</label><textarea id="f_qualitative">${item.qualitative||''}</textarea></div><div class="field full"><label>التوصية</label><textarea id="f_recommendation">${item.recommendation||''}</textarea></div><div class="field full"><button class="btn primary" onclick="saveFollowup('${id||''}')">حفظ</button></div></div>`; }
+function saveFollowup(id){ const obj={id:id||('FU-'+String(data.followups.length+1).padStart(3,'0')), projectId:f_projectId.value, baseline:f_baseline.value, indicators:f_indicators.value, dataSource:f_dataSource.value, periodicity:f_periodicity.value, quantitative:f_quantitative.value, qualitative:f_qualitative.value, recommendation:f_recommendation.value}; if(id) Object.assign(data.followups.find(x=>x.id===id),obj); else data.followups.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' متابعة وقياس أثر'); saveData(); closeModal(); }
+
+function formApproval(id){
+  const item=data.approvals.find(x=>x.id===id)||{};
+  modalTitle.textContent=id?'تعديل إجراء الاعتماد والتعميم':'إضافة إجراء اعتماد أو تعميم';
+  modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>المشروع / المبادرة</label><select id="f_projectId">${data.projects.map(p=>`<option value="${p.id}" ${item.projectId===p.id?'selected':''}>${p.title}</option>`).join('')}</select></div><div class="field"><label>نوع الإجراء</label><select id="f_action">${['اعتماد الإطلاق','تعميم تدريجي','تعميم شامل','نقل الملكية','إعادة تجربة','إيقاف'].map(v=>`<option ${item.action===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>الحالة</label><select id="f_status">${['مخطط','قيد التنفيذ','مكتمل','متعثر','موقوف'].map(v=>`<option ${item.status===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المسؤول</label><input id="f_owner" value="${item.owner||''}"></div><div class="field"><label>تاريخ التنفيذ</label><input id="f_date" type="date" value="${item.date||''}"></div><div class="field"><label>الإدارات / النطاق</label><input id="f_departments" value="${item.departments||''}"></div><div class="field full"><label>خطة التنفيذ والتعميم</label><textarea id="f_plan">${item.plan||''}</textarea></div><div class="field full"><label>المتطلبات والموارد</label><textarea id="f_requirements">${item.requirements||''}</textarea></div><div class="field full"><label>مبررات القرار</label><textarea id="f_notes">${item.notes||''}</textarea></div><div class="field"><label>الإجراء التالي</label><input id="f_nextAction" value="${item.nextAction||''}"></div><div class="field"><label>المسؤول عن الإجراء التالي</label><input id="f_nextOwner" value="${item.nextOwner||''}"></div><div class="field"><label>المهلة</label><input id="f_dueDate" type="date" value="${item.dueDate||''}"></div><div class="field full"><label><input type="checkbox" id="f_documentToKnowledge" ${item.documentToKnowledge?'checked':''}> توثيق الإجراء تلقائيًا في بنك المعرفة</label></div><div class="field full"><button class="btn primary" onclick="saveApproval('${id||''}')">حفظ الإجراء</button></div></div>`;
+}
+function saveApproval(id){
+  const obj={id:id||('AP-'+String(data.approvals.length+1).padStart(3,'0')), projectId:f_projectId.value, action:f_action.value, status:f_status.value, owner:f_owner.value, date:f_date.value, departments:f_departments.value, plan:f_plan.value, requirements:f_requirements.value, notes:f_notes.value, documentToKnowledge:f_documentToKnowledge.checked};
+  if(id) Object.assign(data.approvals.find(x=>x.id===id),obj); else data.approvals.push(obj);
+  if(obj.documentToKnowledge){
+    const linked=data.knowledge.find(k=>k.linked===obj.projectId && k.type==='قرار اعتماد وتعميم');
+    const kobj={id:linked?.id||('KN-'+String(data.knowledge.length+1).padStart(3,'0')), title:`${obj.action} — ${findTitle('projects',obj.projectId)}`, type:'قرار اعتماد وتعميم', status:obj.status==='مكتمل'?'نشط':'قيد التحديث', linked:obj.projectId, lesson:`قرار: ${obj.action}. الحالة: ${obj.status}.`, details:`الخطة: ${obj.plan}\nالمتطلبات: ${obj.requirements}\nالملاحظات: ${obj.notes}`, keywords:'اعتماد، تعميم، قرار تنفيذي'};
+    if(linked) Object.assign(linked,kobj); else data.knowledge.push(kobj);
+  }
+  data.activities.unshift((id?'تعديل':'إضافة')+' إجراء اعتماد/تعميم: '+obj.action); saveData(); closeModal();
+}
+
+function formKnowledge(id){ const item=data.knowledge.find(x=>x.id===id)||{}; modalTitle.textContent=id?'تعديل مادة المعرفة':'إضافة مادة إلى بنك المعرفة'; modalBody.innerHTML=`<div class="form-grid"><div class="field"><label>العنوان</label><input id="f_title" value="${item.title||''}"></div><div class="field"><label>النوع</label><select id="f_type">${['معرفة','تجربة','تجربة متوقفة','درس مستفاد'].map(v=>`<option ${item.type===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>الحالة</label><select id="f_status">${['نشط','متوقفة','مغلق','قيد التحديث'].map(v=>`<option ${item.status===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>مرتبط بـ</label><select id="f_linked"><option value="">—</option>${[...data.projects,...data.challenges].map(v=>`<option value="${v.id}" ${item.linked===v.id?'selected':''}>${v.title}</option>`).join('')}</select></div><div class="field full"><label>الدرس المستفاد</label><textarea id="f_lesson">${item.lesson||''}</textarea></div><div class="field full"><label>التفاصيل</label><textarea id="f_details">${item.details||''}</textarea></div><div class="field full"><label>الكلمات المفتاحية</label><input id="f_keywords" value="${item.keywords||''}"></div><div class="field full"><button class="btn primary" onclick="saveKnowledge('${id||''}')">حفظ</button></div></div>`; }
+function saveKnowledge(id){ const obj={id:id||('KN-'+String(data.knowledge.length+1).padStart(3,'0')), title:f_title.value, type:f_type.value, status:f_status.value, linked:f_linked.value, lesson:f_lesson.value, details:f_details.value, keywords:f_keywords.value}; if(id) Object.assign(data.knowledge.find(x=>x.id===id),obj); else data.knowledge.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' مادة معرفة: '+obj.title); saveData(); closeModal(); }
+
+function formGate(idOrName){ let item=data.gates.find(x=>x.id===idOrName || x.gate===idOrName.split(':')[0]?.trim()) || {gate:'بوابة 1',itemType:'مشروع',need:1,feasibility:1,sustainability:1,value:1,outputs:{a:false,b:false,c:false,d:false}}; modalTitle.textContent=data.gates.find(x=>x.id===idOrName)?'تعديل قرار البوابة':'إضافة قرار بوابة'; modalBody.innerHTML=`<div class="notice">أُعيد تصميم بطاقة تحرير قرار البوابة لتكون أوضح: المعلومات التعريفية، الأدلة والمشاركة، المخرجات الإلزامية، معايير التقييم، ثم القرار النهائي.</div><br><div class="form-grid"><div class="field"><label>البوابة</label><select id="f_gate">${['بوابة 1','بوابة 2','بوابة 3','بوابة 4'].map(v=>`<option ${item.gate===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>نوع المستهدف</label><select id="f_itemType" onchange="refreshGateTargets()">${['مشروع','فكرة','تحدي'].map(v=>`<option ${item.itemType===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>المستهدف</label><select id="f_itemId"></select></div><div class="field"><label>صاحب القرار</label><input id="f_decisionMaker" value="${item.decisionMaker||''}"></div><div class="field"><label>صاحب الصلاحية</label><input id="f_authority" value="${item.authority||''}"></div><div class="field"><label>تاريخ القرار</label><input id="f_date" type="date" value="${item.date||''}"></div><div class="field full"><label>الأدلة والبيانات</label><textarea id="f_evidence">${item.evidence||''}</textarea></div><div class="field full"><label>من شارك وكيف شارك؟</label><textarea id="f_stakeholders">${item.stakeholders||''}</textarea></div><div class="field full"><label>ما الذي غيّر نتيجة المشاركة؟</label><textarea id="f_changeReason">${item.changeReason||''}</textarea></div><div class="field full"><label>المخاطر والافتراضات</label><textarea id="f_risksText">${item.risks||''}</textarea></div><div class="field full"><label>المخرجات الإلزامية</label><div class="chipline"><label><input type="checkbox" id="out_a" ${item.outputs?.a?'checked':''}> نتائج / مخرجات موثقة</label><label><input type="checkbox" id="out_b" ${item.outputs?.b?'checked':''}> مقارنة بخط الأساس</label><label><input type="checkbox" id="out_c" ${item.outputs?.c?'checked':''}> نموذج تشغيل / استدامة</label><label><input type="checkbox" id="out_d" ${item.outputs?.d?'checked':''}> توصية / مبرر نهائي</label></div></div><div class="field"><label>الاستجابة للاحتياج</label><select id="f_need" onchange="calcGateTotal()">${criterionOptions('need',item.need||1)}</select></div><div class="field"><label>القابلية للتنفيذ</label><select id="f_feasibility" onchange="calcGateTotal()">${criterionOptions('feasibility',item.feasibility||1)}</select></div><div class="field"><label>الجدوى والاستدامة</label><select id="f_sustainability" onchange="calcGateTotal()">${criterionOptions('sustainability',item.sustainability||1)}</select></div><div class="field"><label>القيمة والأثر</label><select id="f_value" onchange="calcGateTotal()">${criterionOptions('value',item.value||1)}</select></div><div class="field"><label>المجموع</label><input id="f_total" readonly></div><div class="field"><label>القرار</label><select id="f_decision">${['الانتقال إلى التحديد','تطوير محدود','إعادة تطوير','جاهز للتجربة','تبنٍ وتطبيق','اعتماد وتعميم','إيقاف'].map(v=>`<option ${item.decision===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field full"><label>مبررات القرار</label><textarea id="f_notes">${item.notes||''}</textarea></div><div class="field"><label>الإجراء التالي</label><input id="f_nextAction" value="${item.nextAction||''}"></div><div class="field"><label>المسؤول عن الإجراء التالي</label><input id="f_nextOwner" value="${item.nextOwner||''}"></div><div class="field"><label>المهلة</label><input id="f_dueDate" type="date" value="${item.dueDate||''}"></div><div class="field full"><button class="btn primary" onclick="saveGate('${data.gates.find(x=>x.id===idOrName)?.id||''}')">حفظ</button></div></div>`; refreshGateTargets(item.itemId); calcGateTotal(); }
+function refreshGateTargets(selected=''){ const type=document.getElementById('f_itemType').value; let list=data.projects; if(type==='فكرة') list=data.ideas; if(type==='تحدي') list=data.challenges; document.getElementById('f_itemId').innerHTML=list.map(v=>`<option value="${v.id}" ${selected===v.id?'selected':''}>${v.title}</option>`).join(''); }
+function calcGateTotal(){ document.getElementById('f_total').value=(+f_need.value||0)+(+f_feasibility.value||0)+(+f_sustainability.value||0)+(+f_value.value||0); }
+function saveGate(id){ const obj={id:id||('GT-'+String(data.gates.length+1).padStart(3,'0')), gate:f_gate.value, itemType:f_itemType.value, itemId:f_itemId.value, decisionMaker:f_decisionMaker.value, authority:f_authority.value, date:f_date.value, evidence:f_evidence.value, stakeholders:f_stakeholders.value, changeReason:f_changeReason.value, risks:f_risksText.value, outputs:{a:out_a.checked,b:out_b.checked,c:out_c.checked,d:out_d.checked}, need:+f_need.value||1, feasibility:+f_feasibility.value||1, sustainability:+f_sustainability.value||1, value:+f_value.value||1, decision:f_decision.value, notes:f_notes.value,nextAction:f_nextAction.value,nextOwner:f_nextOwner.value,dueDate:f_dueDate.value}; if(id) Object.assign(data.gates.find(x=>x.id===id),obj); else data.gates.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' قرار '+obj.gate); saveData(); closeModal(); }
+
+
+function generateToolAnalysis(id){
+  const tool=data.tools.find(t=>t.id===id);
+  if(!tool){ alert('تعذر العثور على الأداة.'); return; }
+  const entries=Object.entries(tool.values||{}).map(([k,v])=>({key:k,value:String(v||'').trim()})).filter(x=>x.value);
+  if(!entries.length){ alert('أدخل بيانات الأداة واحفظها أولًا قبل توليد التحليل.'); return; }
+  const corpus=entries.map(x=>x.value).join(' ');
+  const emptyFields=(toolTemplates[tool.tool]||[]).filter(k=>!String((tool.values||{})[k]||'').trim());
+  const evidence=entries.filter(x=>/دليل|تقرير|استبيان|مقابلة|قياس|بيانات|مصدر/.test(x.key+' '+x.value)).length;
+  const causes=entries.filter(x=>/سبب|جذر|لماذا|مشكلة|ألم/.test(x.key+' '+x.value)).length;
+  const stakeholders=entries.filter(x=>/مستفيد|أصحاب المصلحة|فئة|شريك|متأثر/.test(x.key+' '+x.value)).length;
+  const strengths=[];
+  if(evidence) strengths.push('وجود مدخلات ذات صلة بالأدلة أو البيانات');
+  if(causes) strengths.push('وجود إشارات إلى الأسباب أو جذور المشكلة');
+  if(stakeholders) strengths.push('مراعاة المستفيدين أو أصحاب المصلحة');
+  if(!strengths.length) strengths.push('توافر مدخلات أولية قابلة للبناء عليها');
+  const gaps=[];
+  if(emptyFields.length) gaps.push('استكمال الحقول: '+emptyFields.join('، '));
+  if(!evidence) gaps.push('إضافة دليل أو مصدر تحقق أو بيانات كمية/نوعية');
+  if(tool.stage==='الاستكشاف'&&!stakeholders) gaps.push('توضيح الفئة المستفيدة أو أصحاب المصلحة');
+  const readiness=Math.min(100,40+entries.length*8+(evidence?12:0)+(causes?8:0)+(stakeholders?8:0)-emptyFields.length*5);
+  tool.aiAnalysis={
+    generatedAt:new Date().toISOString(),
+    summary:`تُظهر مدخلات أداة «${tool.tool}» أن الموضوع يتركز حول: ${corpus.slice(0,220)}${corpus.length>220?'…':''}`,
+    strengths:strengths.join('؛ '),
+    gaps:gaps.length?gaps.join('؛ '):'لا توجد فجوات جوهرية ظاهرة، مع ضرورة المراجعة البشرية.',
+    readiness,
+    recommendation:readiness>=75?'اعتماد مخرجات الأداة ضمن تحليل المرحلة بعد مراجعة الفريق.':readiness>=55?'استكمال الفجوات المحددة ثم إعادة التحليل.':'تعميق الإدخال وإضافة أدلة قبل الاعتماد.'
+  };
+  data.activities.unshift('توليد تحليل ذكي لأداة '+tool.tool);
+  saveData();
+  modalTitle.textContent='التحليل الذكي: '+tool.tool;
+  modalBody.innerHTML=`<div class="grid3"><div class="record-card"><h4>الخلاصة</h4><p>${tool.aiAnalysis.summary}</p></div><div class="record-card"><h4>نقاط القوة</h4><p>${tool.aiAnalysis.strengths}</p></div><div class="record-card"><h4>الجاهزية</h4><div style="font-size:30px;font-weight:900">${tool.aiAnalysis.readiness}%</div></div></div><br><div class="notice"><b>الفجوات:</b> ${tool.aiAnalysis.gaps}<br><b>التوصية:</b> ${tool.aiAnalysis.recommendation}</div><div class="note-sm" style="margin-top:8px">تحليل محلي مساعد مبني على المدخلات المحفوظة، ولا يستبدل رأي الفريق أو اعتماد البوابة.</div>`;
+  modal.classList.add('show');
+}
+
+function openToolForm(toolName,stage,id=''){ const item=data.tools.find(x=>x.id===id)||{tool:toolName,stage,values:{}}; modalTitle.textContent=(id?'تعديل أداة: ':'أداة: ')+toolName; const info=toolInfo[toolName]||{def:'—',how:'—',result:'—'}; const fields=toolTemplates[toolName]||['العنصر 1','العنصر 2']; modalBody.innerHTML=`<div class="notice"><b>التعريف:</b> ${info.def}<br><b>طريقة الاستخدام:</b> ${info.how}<br><b>النتيجة:</b> ${info.result}</div><br><div class="form-grid"><div class="field"><label>عنوان السجل</label><input id="t_title" value="${item.title||''}"></div><div class="field"><label>المرحلة</label><input id="t_stage" value="${stage}" readonly></div>${fields.map((f,i)=>`<div class="field full"><label>${f}</label><textarea id="tool_${i}">${(item.values||{})[f]||''}</textarea></div>`).join('')}<div class="field full"><div class="actions-sm"><button class="btn primary" onclick='saveTool(${JSON.stringify(id)},${JSON.stringify(toolName)},${JSON.stringify(stage)},${JSON.stringify(fields)})'>حفظ الأداة</button>${id?`<button type="button" class="btn gold-btn" onclick="generateToolAnalysis('${id}')">توليد تحليل ذكي للأداة</button>`:''}</div></div></div>`; document.getElementById('modal').classList.add('show'); }
+function saveTool(id,toolName,stage,fields){ const values={}; fields.forEach((f,i)=>values[f]=document.getElementById('tool_'+i).value); const obj={id:id||('TL-'+String(data.tools.length+1).padStart(3,'0')), tool:toolName, stage, title:t_title.value, values}; if(id) Object.assign(data.tools.find(x=>x.id===id),obj); else data.tools.push(obj); data.activities.unshift((id?'تعديل':'إضافة')+' أداة '+toolName); saveData(); closeModal(); }
+function toolInfoModal(name){ const info=toolInfo[name]||{def:'—',how:'—',result:'—'}; modalTitle.textContent='تعريف بالأداة: '+name; modalBody.innerHTML=`<div class="record-card"><h4>${name}</h4><p><b>التعريف:</b> ${info.def}</p><p><b>طريقة الاستخدام:</b> ${info.how}</p><p><b>النتيجة المتوقعة:</b> ${info.result}</p><div class="actions-sm"><button class="btn primary" onclick="openToolForm('${name}','الاستكشاف')">فتح الأداة</button></div></div>`; document.getElementById('modal').classList.add('show'); }
+
+function dupCheck(v,collection,zoneId){ const list=data[collection]||[]; const found=list.find(x=>(x.title||'').includes(v) && v.length>3); document.getElementById(zoneId).innerHTML = found ? `<div class="notice">يوجد سجل مشابه: <b>${found.title}</b>. راجع الفرق قبل الحفظ.</div>` : ''; }
+function deleteItem(collection,id){ if(!confirm('هل تريد الحذف؟')) return; data[collection]=data[collection].filter(x=>x.id!==id); data.activities.unshift('حذف من '+collection+': '+id); saveData(); }
+function exportData(){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})); a.download='jadwa-method-aligned-v4.json'; a.click(); }
+function importData(e){ const file=e.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=()=>{ try{ data=JSON.parse(r.result); ensureShape(); saveData(); alert('تم استيراد البيانات بنجاح'); }catch(err){ alert('الملف غير صالح'); } }; r.readAsText(file); }
+
+createSidebar();
+buildPages();
+renderAll();
+</script>
+
+<script>
+/* ===== طبقة مراجعة وتصحيح شاملة v8 ===== */
+(function(){
+  'use strict';
+  const E=id=>document.getElementById(id);
+  const V=id=>E(id)?.value ?? '';
+  const N=id=>Number(V(id))||0;
+  const C=id=>!!E(id)?.checked;
+  const S=id=>E(id)?[...E(id).selectedOptions].map(o=>o.value):[];
+  const byId=(arr,id)=>arr.find(x=>x.id===id);
+  const upsert=(arr,obj,id)=>{ if(id){const old=byId(arr,id); if(old) Object.assign(old,obj); else arr.push(obj);} else arr.push(obj); };
+  const safe=(name,fn)=>{ try{return fn();}catch(err){console.error('[جذوة]',name,err); return null;} };
+  window.$jadwa={E,V,N,C,S,safe};
+
+  // إشعار واضح بدل أن يبدو الزر وكأنه لم يعمل.
+  window.jadwaToast=function(message,type='ok'){
+    let box=E('jadwaToast');
+    if(!box){box=document.createElement('div');box.id='jadwaToast';box.style.cssText='position:fixed;left:24px;bottom:24px;z-index:9999;padding:13px 18px;border-radius:12px;color:#fff;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.2);transition:.25s;max-width:420px';document.body.appendChild(box);}
+    box.style.background=type==='error'?'#a54343':'#1f6f5d'; box.textContent=message; box.style.opacity='1';
+    clearTimeout(window.__jadwaToastTimer); window.__jadwaToastTimer=setTimeout(()=>box.style.opacity='0',2600);
+  };
+
+  // منع تعطل كل الواجهة إذا أخفق مكوّن فرعي واحد.
+  window.saveData=function(){
+    safe('localStorage',()=>localStorage.setItem('jadwa_method_aligned_v6',JSON.stringify(data)));
+    safe('renderAll',()=>window.renderAll());
+  };
+  window.renderAll=function(){
+    [['kc',data.challenges.length],['ki',data.ideas.length],['kp',data.projects.length],['ke',data.experiments.length],['kg',data.gates.length],['kk',data.knowledge.length]].forEach(([id,v])=>{if(E(id))E(id).textContent=v;});
+    [
+      'renderDashboard','renderObservatory','renderCycles','renderPortfolio','renderChallenges','renderIdeas','renderEvaluations',
+      'renderToolGrids','renderToolsByStage','renderScope','renderSolutions','renderPrototypes','renderExperiments',
+      'renderFollowups','renderLogicalFrames','renderImpact','renderApprovals','renderKnowledge','renderRewards'
+    ].forEach(name=>{if(typeof window[name]==='function')safe(name,()=>window[name]());});
+    if(typeof window.renderGateWorkspace==='function'){
+      safe('gate1',()=>renderGateWorkspace('exploration_gate1','بوابة 1','الاستكشاف','هل ثبت الاحتياج، واتضحت الفئة المستفيدة والأدلة والأولوية؟','إدارة الابتكار + الإدارة المالكة'));
+      safe('gate2',()=>renderGateWorkspace('definition_gate2','بوابة 2','التحديد','هل المشكلة محددة بوضوح ونطاق التدخل مضبوط وقابل للتنفيذ؟','الإدارة المالكة + إدارة الابتكار'));
+      safe('gate3',()=>renderGateWorkspace('development_gate3','بوابة 3','التطوير','هل الحل مناسب ومهيأ للتجربة، وهل مؤشرات الاختبار والميزانية والمخاطر واضحة؟','إدارة الاستراتيجية وتطوير الأعمال'));
+      safe('gate4',()=>renderGateWorkspace('delivery_gate4','بوابة 4','التسليم','هل أثبتت التجربة أثرًا وقيمة واستدامة تبرر الإطلاق أو التعميم؟','الإدارة التنفيذية العليا'));
+    }
+  };
+
+  window.refreshEvalTargets=function(selected=''){
+    const type=V('f_targetType'); const list=type==='فكرة'?data.ideas:data.challenges; const sel=E('f_targetId');
+    if(sel) sel.innerHTML=list.map(x=>`<option value="${x.id}" ${selected===x.id?'selected':''}>${x.title}</option>`).join('');
+  };
+  window.showEvalTotal=function(){
+    const total=N('f_need')+N('f_feasibility')+N('f_sustainability')+N('f_value');
+    const blocked=N('f_need')===1||N('f_value')===1;
+    const rec=blocked?'لا يجتاز — قاعدة ضابطة':total>=10?'جاهز':total>=7?'تطوير محدود':'إعادة تطوير';
+    if(E('f_total'))E('f_total').value=`${total}/12 — ${rec}`;
+  };
+  window.saveEvaluation=function(id=''){
+    try{
+      const targetType=V('f_targetType'), targetId=V('f_targetId');
+      if(!targetId){jadwaToast('اختر المستهدف قبل الحفظ','error');return;}
+      const duplicate=data.evaluations.find(e=>e.id!==id&&e.model!=='مصفاة 100'&&e.targetType===targetType&&e.targetId===targetId);
+      if(duplicate){jadwaToast('يوجد تقييم منهجي محفوظ؛ افتحه وعدّله بدل إنشاء تقييم آخر','error');return;}
+      const obj={id:id||('EV-'+String(data.evaluations.length+1).padStart(3,'0')),model:'معايير منهجية 12',targetType,targetId,need:N('f_need')||1,feasibility:N('f_feasibility')||1,sustainability:N('f_sustainability')||1,value:N('f_value')||1,needReason:V('f_needReason'),feasibilityReason:V('f_feasibilityReason'),sustainabilityReason:V('f_sustainabilityReason'),valueReason:V('f_valueReason')};
+      upsert(data.evaluations,obj,id); data.activities.unshift((id?'تعديل':'إضافة')+' التقييم المنهجي: '+obj.id);
+      saveData(); closeModal(); jadwaToast('تم حفظ التقييم وظهر في مصفاة التقييم');
+    }catch(err){console.error(err);jadwaToast('تعذر حفظ التقييم: '+err.message,'error');}
+  };
+
+  // محرر أداة لا يعتمد على صياغة onclick مع مصفوفات JSON.
+  window.__activeTool=null;
+  window.openToolForm=function(toolName,stage,id=''){
+    const item=data.tools.find(x=>x.id===id)||{tool:toolName,stage,values:{}};
+    const info=toolInfo[toolName]||{def:'—',how:'—',result:'—'};
+    const fields=toolTemplates[toolName]||['العنصر 1','العنصر 2'];
+    window.__activeTool={id,toolName,stage,fields};
+    E('modalTitle').textContent=(id?'تعديل أداة: ':'أداة: ')+toolName;
+    E('modalBody').innerHTML=`<div class="notice"><b>التعريف:</b> ${info.def}<br><b>طريقة الاستخدام:</b> ${info.how}<br><b>النتيجة:</b> ${info.result}</div><br><div class="form-grid"><div class="field"><label>عنوان السجل</label><input id="t_title" value="${item.title||''}"></div><div class="field"><label>المرحلة</label><input id="t_stage" value="${stage}" readonly></div>${fields.map((f,i)=>`<div class="field full"><label>${f}</label><textarea id="tool_${i}">${(item.values||{})[f]||''}</textarea></div>`).join('')}<div class="field full"><div class="actions-sm"><button type="button" class="btn primary" onclick="saveCurrentTool()">حفظ الأداة</button>${id?`<button type="button" class="btn gold-btn" onclick="generateToolAnalysis('${id}')">توليد تحليل ذكي للأداة</button>`:''}</div></div></div>`;
+    E('modal').classList.add('show');
+  };
+  window.saveCurrentTool=function(){
+    const ctx=window.__activeTool; if(!ctx){jadwaToast('تعذر تحديد الأداة الحالية','error');return;}
+    const values={}; ctx.fields.forEach((f,i)=>values[f]=V('tool_'+i));
+    const obj={id:ctx.id||('TL-'+String(data.tools.length+1).padStart(3,'0')),tool:ctx.toolName,stage:ctx.stage,title:V('t_title'),values};
+    upsert(data.tools,obj,ctx.id); data.activities.unshift((ctx.id?'تعديل':'إضافة')+' أداة '+ctx.toolName);
+    saveData(); closeModal(); jadwaToast('تم حفظ الأداة بنجاح');
+  };
+  window.saveTool=function(id,toolName,stage,fields){window.__activeTool={id,toolName,stage,fields};return saveCurrentTool();};
+
+  // بقية عمليات الحفظ بصياغة صريحة ومتوافقة مع جميع المتصفحات.
+  window.saveOpportunity=function(id=''){const obj={id:id||('OP-'+String(data.opportunities.length+1).padStart(3,'0')),title:V('f_title'),type:V('f_type'),source:V('f_source'),dimension:V('f_dimension'),urgency:V('f_urgency'),owner:V('f_owner'),summary:V('f_summary')};upsert(data.opportunities,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' فرصة/احتياج: '+obj.title);saveData();closeModal();jadwaToast('تم الحفظ');};
+  window.saveScope=function(id=''){const obj={id:id||('SC-'+String(data.scope.length+1).padStart(3,'0')),projectId:V('f_projectId'),inScope:V('f_inScope'),outScope:V('f_outScope'),constraints:V('f_constraints')};upsert(data.scope,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' نطاق تدخل');saveData();closeModal();jadwaToast('تم حفظ نطاق التدخل');};
+  window.saveSolution=function(id=''){const obj={id:id||('SL-'+String(data.solutions.length+1).padStart(3,'0')),projectId:V('f_projectId'),title:V('f_title'),impact:N('f_impact'),ease:N('f_ease'),sustainability:N('f_sustainability'),risk:V('f_risk'),decision:V('f_decision')};upsert(data.solutions,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' حل: '+obj.title);saveData();closeModal();jadwaToast('تم حفظ الحل');};
+  window.savePrototype=function(id=''){const obj={id:id||('PT-'+String(data.prototypes.length+1).padStart(3,'0')),projectId:V('f_projectId'),hypothesis:V('f_hypothesis'),prototype:V('f_prototype'),testPlan:V('f_testPlan'),metrics:V('f_metrics'),budget:V('f_budget'),risks:V('f_risks')};upsert(data.prototypes,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' نموذج أولي');saveData();closeModal();jadwaToast('تم حفظ النموذج الأولي');};
+  window.saveExperiment=function(id=''){const obj={id:id||('EX-'+String(data.experiments.length+1).padStart(3,'0')),projectId:V('f_projectId'),hypothesis:V('f_hypothesis'),baseline:V('f_baseline'),target:V('f_target'),result:V('f_result'),status:V('f_status')};upsert(data.experiments,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' تجربة');saveData();closeModal();jadwaToast('تم حفظ التجربة');};
+  window.saveFollowup=function(id=''){const obj={id:id||('FU-'+String(data.followups.length+1).padStart(3,'0')),projectId:V('f_projectId'),baseline:V('f_baseline'),indicators:V('f_indicators'),dataSource:V('f_dataSource'),periodicity:V('f_periodicity'),quantitative:V('f_quantitative'),qualitative:V('f_qualitative'),recommendation:V('f_recommendation')};upsert(data.followups,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' متابعة وقياس أثر');saveData();closeModal();jadwaToast('تم حفظ المتابعة وقياس الأثر');};
+  window.saveKnowledge=function(id=''){const obj={id:id||('KN-'+String(data.knowledge.length+1).padStart(3,'0')),title:V('f_title'),type:V('f_type'),status:V('f_status'),linked:V('f_linked'),lesson:V('f_lesson'),details:V('f_details'),keywords:V('f_keywords')};upsert(data.knowledge,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' مادة معرفة: '+obj.title);saveData();closeModal();jadwaToast('تم حفظ مادة المعرفة');};
+  window.saveCycle=function(id=''){const obj={id:id||('CY-'+String(data.cycles.length+1).padStart(3,'0')),title:V('f_title'),status:V('f_status'),scope:V('f_scope'),start:V('f_start'),end:V('f_end'),manager:V('f_manager'),facilitators:V('f_facilitators'),budget:V('f_budget'),currentStep:N('f_currentStep')||1,projects:S('f_projects')};upsert(data.cycles,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' دورة معمل: '+obj.title);saveData();closeModal();jadwaToast('تم حفظ دورة المعمل');};
+  window.saveLogical=function(id=''){const obj={id:id||('LF-'+String(data.logicalFrames.length+1).padStart(3,'0')),projectId:V('f_projectId'),rows:Array.isArray(window._logicRows)?window._logicRows:[]};upsert(data.logicalFrames,obj,id);data.activities.unshift((id?'تعديل':'إضافة')+' مصفوفة إطار منطقي');saveData();closeModal();jadwaToast('تم حفظ مصفوفة الإطار المنطقي');};
+
+  // تشخيص ذاتي مخفي يظهر فقط عند وجود مشكلة.
+  window.jadwaSelfTest=function(){
+    const report={};
+    ['data','renderAll','openForm','saveEvaluation','openToolForm','saveCurrentTool','saveData'].forEach(n=>report[n]=typeof window[n]);
+    report.collections=['challenges','ideas','evaluations','tools','gates','knowledge'].reduce((a,k)=>(a[k]=Array.isArray(data[k]),a),{});
+    report.ok=Object.values(report.collections).every(Boolean)&&report.saveEvaluation==='function'&&report.saveCurrentTool==='function';
+    console.table(report); return report;
+  };
+  safe('initial repair render',()=>window.renderAll());
+  console.info('Jadwa v8 self-test',window.jadwaSelfTest());
+})();
+</script>
+
+
+<script id="mobile-responsive-script">
+(function(){
+  const body=document.body;
+  const sidebar=document.querySelector('.sidebar');
+  const toggle=document.getElementById('mobileMenuToggle');
+  const backdrop=document.getElementById('mobileSidebarBackdrop');
+  if(!sidebar||!toggle||!backdrop) return;
+  sidebar.id='appSidebar';
+  if(!sidebar.querySelector('.mobile-sidebar-close')){
+    const close=document.createElement('button');
+    close.type='button';close.className='mobile-sidebar-close';close.setAttribute('aria-label','إغلاق القائمة');close.textContent='×';
+    sidebar.prepend(close);
+    close.addEventListener('click',closeNav);
+  }
+  function openNav(){body.classList.add('mobile-nav-open');toggle.setAttribute('aria-expanded','true');}
+  function closeNav(){body.classList.remove('mobile-nav-open');toggle.setAttribute('aria-expanded','false');}
+  toggle.addEventListener('click',()=>body.classList.contains('mobile-nav-open')?closeNav():openNav());
+  backdrop.addEventListener('click',closeNav);
+  sidebar.addEventListener('click',e=>{if(window.innerWidth<=768&&e.target.closest('.nav-btn,.sub-btn')) closeNav();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape') closeNav();});
+  window.addEventListener('resize',()=>{if(window.innerWidth>768) closeNav();});
+})();
+</script>
+
+</body>
+</html>
